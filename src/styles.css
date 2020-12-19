@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+.container{
+  position: relative;
+  width: 100%;
+  z-index: 999;
+}
+
+.container-sub {
+  position: absolute;
+  width: 100%;
+  margin-top: 51px;
+  background-color: rgb(255, 255, 255);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

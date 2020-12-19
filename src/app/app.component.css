@@ -1,0 +1,77 @@
+
+.topHeader{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  border-bottom: 1px solid rgb(180, 166, 166);
+}
+
+.headerTitle{
+  display: block;
+  user-select: none;
+  font-size: 18px;
+  line-height: 50px;
+  margin-left: 80px;
+}
+
+.sidebar{
+  position: fixed;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: #042331;
+  margin-top: 50px;
+  transition: all .5s ease;
+  z-index: 1000;
+}
+.sidebar ul a{
+  display: block;
+  user-select: none;
+  height: 100%;
+  width: 100%;
+  line-height: 60px;
+  font-size: 17px;
+  color: white;
+  padding-left: 40px;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid black;
+  transition: .4s;
+}
+
+ul li:hover a{
+  padding-left: 50px;
+}
+
+.sidebar ul a fa-icon{
+  margin-right: 16px;
+}
+
+label #btnBarOpen, label #btnBarClose{
+  position: fixed;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+#check{
+  display: none;
+}
+
+label #btnBarOpen{
+  left: 10px;
+  top: 5px;
+  font-size: 25px;
+  color: rgb(131, 129, 129);
+  padding: 6px 12px;
+  transition: all .5s;
+}
+
+#check:checked ~ .sidebar{
+  left: 0;
+}
+
+#check:checked ~ section{
+  margin-left: 250px;
+}

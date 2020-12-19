@@ -1,0 +1,101 @@
+.carousel-container{
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  height: 480px;
+  background-color: rgb(241, 241, 241);
+  border: 1px;
+}
+
+.carousel-container p{
+  position: relative;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.image-container{
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  align-self: stretch;
+
+  height: 300px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: white;
+}
+.filebrowser-container{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  align-self: center;
+  position: relative;
+  background-color: rgb(255, 255, 255);
+  border: dashed 1px #979797;
+  flex-grow: 2;
+  width: 400px;
+}
+.filebrowser-container input{
+  display: block;
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+.filebrowser-container h3{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filebrowser-container label{
+  color: white;
+  border-radius: 20px;
+  background-color: rgb(211, 35, 35);
+  width: 183px;
+  height: 44px;
+  padding: 8px 16px;
+}
+
+.file-over{
+  border: dashed 2px #169b11;
+}
+
+.file-icon{
+  position: relative;
+  margin: 5px;
+}
+.image-icon{
+  height: 250px;
+  width: 250px;
+  margin: 10px;
+}
+
+.delete-image{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.progress-cont {
+  height: 7px;
+  width: 100%;
+  border-radius: 4px;
+  background-color: #d0d0d0;
+  position: absolute;
+  left: 0px;
+  bottom: 5px;
+
+}
+.progress {
+  width: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  border-radius: 4px;
+  background-color: #4c97cb;
+  transition: 0.5s all;
+}

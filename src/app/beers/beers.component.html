@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="container-sub">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 content-table">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> ID </th>
+        <td mat-cell *matCellDef="let element"> <a href="#">{{element.position}}</a> </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Tên Sản Phẩm </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Weight </th>
+        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Symbol </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Xóa </th>
+        <td mat-cell *matCellDef="let element">
+          <fa-icon [icon]="faTrash" class="delete-image" (click)="deleteProduct(element)"></fa-icon>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-rows"></tr>
+    </table>
+  </div>
+</div>

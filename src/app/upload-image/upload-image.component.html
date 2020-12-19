@@ -1,0 +1,19 @@
+<div class="carousel-container">
+  <p>{{title}}</p>
+  <div class="image-container">
+    <div *ngFor="let file of files; let i = index" class="file-icon">
+      <img src={{file.url}} class="image-icon">
+      <fa-icon [icon]="faTrash" class="delete-image" (click)="deleteFile(i)"></fa-icon>
+      <div *ngIf="file?.processing" class="progress-cont">
+        <div class="progress" [style.width]="file?.progress + '%'">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="filebrowser-container" appDnd (fileDropped)="onFileDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)">
+    <h3>Drag and drop file here</h3>
+    <h3>or</h3>
+    <label for="fileDropRef">Browse for file</label>
+  </div>
+</div>
