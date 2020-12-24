@@ -13,7 +13,7 @@ import { AppConfig } from '../config'
 export class UploadImageComponent implements OnInit {
 
   @Input() title: string;
-  @Input() path: string;
+  path: string;
 
   files: any[] = [];
   faTrash = faTrash
@@ -21,7 +21,14 @@ export class UploadImageComponent implements OnInit {
   constructor(private uploadService: UploadFileService) { }
 
   ngOnInit(): void {
-    this.getAllImage('carousel/all');
+  }
+
+  setPath(p:string):void{
+    this.path = p;
+  }
+
+  loadAllImage(){
+    this.getAllImage(this.path+'/all');
   }
 
   fileBrowseHandler(files) {
@@ -35,7 +42,7 @@ export class UploadImageComponent implements OnInit {
   deleteFile(index: number) {
 
     let file = this.files[index];
-    this.uploadService.deleteFile('carousel/delete', file.ImageID).subscribe(
+    this.uploadService.deleteFile(this.path+'/delete', file.ImageID).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
         } else if (event instanceof HttpResponse) {
@@ -72,20 +79,18 @@ export class UploadImageComponent implements OnInit {
     }
   }
 
-
-
   upload(file: any): void {
     file.progress = 0;
     file.processing = true;
 
-    this.uploadService.upload(file, this.path).subscribe(
+    this.uploadService.upload(file, this.path+'/upload').subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           file.progress = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
-          console.log(event.body);
+          console.log(event.body.body);
           file.processing = false;
-          file.ImageID = event.body.response;
+          file.ImageID = event.body.body.response;
         }
       },
       err => {
@@ -103,7 +108,10 @@ export class UploadImageComponent implements OnInit {
         if (event.type === HttpEventType.UploadProgress) {
         } else if (event instanceof HttpResponse) {
           console.log(event.body);
-          for (const imgID of event.body) {
+          for (const img of event.body) {
+            let imgID = img.id;
+            console.log(imgID);
+
             let item = {url:'', processing: false, ImageID:imgID}
             item.url = AppConfig.BaseUrl+'image/'+imgID;
             this.files.push(item);

@@ -65,11 +65,18 @@
 .file-icon{
   position: relative;
   margin: 5px;
+  min-width: 270px;
 }
 .image-icon{
-  height: 250px;
-  width: 250px;
-  margin: 10px;
+  object-fit: cover;
+  max-height: 250px;
+  max-width: 250px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .delete-image{

@@ -2,17 +2,18 @@
   <header class="headerTitle">BIOmarket</header>
 </div>
 <input type="checkbox" id="check">
-<label class="" for="check">
+<label class="hide-checkbox" for="check">
   <fa-icon [icon]="faBars" id="btnBarOpen"></fa-icon>
 </label>
 <div class="sidebar">
   <ul>
-    <li><a href="/users"><fa-icon [icon]="faUser" ></fa-icon>Người Dùng</a></li>
-    <li><a href="/beers"><fa-icon [icon]="faBeer"></fa-icon>Sản Phẩm</a></li>
-    <li><a href="/orders"><fa-icon [icon]="faShoppingCart"></fa-icon>Đơn Hàng</a></li>
-    <li><a href="/setting"><fa-icon [icon]="faCogs"></fa-icon>Cài Đặt</a></li>
-    <li><a href="/images"><fa-icon [icon]="faImages"></fa-icon>Hình Ảnh</a></li>
+    <li><a routerLink="/users"><fa-icon [icon]="faUser" ></fa-icon>Người Dùng</a></li>
+    <li><a routerLink="/beers"><fa-icon [icon]="faBeer"></fa-icon>Sản Phẩm</a></li>
+    <li><a routerLink="/orders"><fa-icon [icon]="faShoppingCart"></fa-icon>Đơn Hàng</a></li>
+    <li><a routerLink="/setting"><fa-icon [icon]="faCogs"></fa-icon>Cài Đặt</a></li>
+    <li><a routerLink="/images"><fa-icon [icon]="faImages"></fa-icon>Hình Ảnh</a></li>
   </ul>
 </div>
-
-<router-outlet></router-outlet>
+<section>
+  <router-outlet></router-outlet>
+</section>

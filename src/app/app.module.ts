@@ -17,6 +17,8 @@ import { DndDirective } from './directives/dnd.directive';
 import { UploadImageComponent } from './upload-image/upload-image.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BeerDetailComponent } from './beer-detail/beer-detail.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ListBeerComponent } from './list-beer/list-beer.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { BeerDetailComponent } from './beer-detail/beer-detail.component';
     ImagesComponent,
     DndDirective,
     UploadImageComponent,
-    BeerDetailComponent
+    BeerDetailComponent,
+    PageNotFoundComponent,
+    ListBeerComponent
   ],
   imports: [
     BrowserModule,
@@ -36,12 +40,23 @@ import { BeerDetailComponent } from './beer-detail/beer-detail.component';
     AppRoutingModule,
     FontAwesomeModule,
     RouterModule.forRoot([
-      { path: '', component: UsersComponent },
+      { path: '', redirectTo: '/users', pathMatch: 'full' },
       { path: 'users', component: UsersComponent },
-      { path: 'beers', component: BeersComponent },
+      {
+        path: 'beers', component: BeersComponent, children: [
+          {
+            path: '',
+            component: ListBeerComponent},
+          {
+            path: 'beerdetail/:beerId',
+            component: BeerDetailComponent
+          }
+        ]
+      },
       { path: 'orders', component: OrdersComponent },
       { path: 'setting', component: SettingComponent },
       { path: 'images', component: ImagesComponent },
+      { path: '**', component: PageNotFoundComponent }
     ]),
     BrowserAnimationsModule,
     MatTableModule

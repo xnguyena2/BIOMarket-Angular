@@ -1,11 +1,17 @@
+.hide-checkbox{
+  position: relative;
+  z-index: 3;
+}
 
 .topHeader{
   position: fixed;
+  z-index: 2;
   top: 0;
   left: 0;
   height: 50px;
   width: 100%;
   border-bottom: 1px solid rgb(180, 166, 166);
+  background-color: white;
 }
 
 .headerTitle{
@@ -74,4 +80,10 @@ label #btnBarOpen{
 
 #check:checked ~ section{
   margin-left: 250px;
+}
+
+section{
+  position: relative;
+  transition: all .5s ease;
+  z-index: 1;
 }
