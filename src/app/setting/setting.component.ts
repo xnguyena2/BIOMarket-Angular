@@ -8,6 +8,8 @@ import { UploadImageComponent } from '../upload-image/upload-image.component';
 })
 export class SettingComponent implements AfterViewInit {
 
+  colorrrr:string;
+
   @ViewChild('imageManager') imageManager:UploadImageComponent
 
   carouselPath = 'carousel'

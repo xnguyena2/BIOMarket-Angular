@@ -39,7 +39,7 @@ export class UploadFileService {
   deleteFile(path: string, imgID: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
-    formData.append('img', imgID);
+    formData.append('id', imgID);
 
     const req = new HttpRequest('POST', `${this.baseUrl+path}`, formData, {
       reportProgress: true,

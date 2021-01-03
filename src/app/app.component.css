@@ -1,5 +1,5 @@
 .hide-checkbox{
-  position: relative;
+  position: fixed;
   z-index: 3;
 }
 
@@ -49,6 +49,7 @@
 
 ul li:hover a{
   padding-left: 50px;
+  text-decoration: none;
 }
 
 .sidebar ul a fa-icon{
