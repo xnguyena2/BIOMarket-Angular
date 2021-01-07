@@ -47,7 +47,7 @@
   margin-bottom: 15px;
 }
 
-.input-field label{
+.input-field label, option, select{
   width: 150px;
   color: #757575;
   margin-right: 10px;

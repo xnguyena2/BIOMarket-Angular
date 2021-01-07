@@ -19,7 +19,8 @@ interface BeerUnit {
   price: number;
   discount: number;
   dateExpir: NgbDateStruct;
-  shipPrice: string;
+  weight: number;
+  volumetric:number;
 }
 
 export interface BeerDetail {
@@ -107,7 +108,8 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       name: '',
       price: 0,
       discount: 0,
-      shipPrice: '',
+      weight: 0,
+      volumetric: 0,
       dateExpir: null
     };
   }

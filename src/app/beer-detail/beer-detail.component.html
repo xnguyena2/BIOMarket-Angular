@@ -53,8 +53,12 @@
               </div>
             </div>
             <div class="input-field">
-              <label>Thể Tích/Khối Lượng Của Đơn Vị(lit/kg):</label>
-              <input type="text" class="input" [(ngModel)]='unit.shipPrice'>
+              <label>Thể Tích(ml):</label>
+              <input type="text" class="input" [(ngModel)]='unit.volumetric'>
+            </div>
+            <div class="input-field">
+              <label>Khối Lượng(Kg):</label>
+              <input type="text" class="input" [(ngModel)]='unit.weight'>
             </div>
             <div class="input-field">
               <fa-icon [icon]="faTrash" class="sub-beer-type" (click)='removeUnit(i)' *ngIf='listUnits.length>1'></fa-icon>

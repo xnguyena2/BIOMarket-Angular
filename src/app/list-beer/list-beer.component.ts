@@ -4,15 +4,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-export interface PeriodicElement {
+export interface BeerBasicInfo {
+  id:string;
   name: string;
-  position:number;
-  weight: number;
-  symbol: string;
+  sold: number;
+  order: number;
 }
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+const ELEMENT_DATA: BeerBasicInfo[] = [
+  { id: "123", name: 'Bia Nhập Lậu', sold: 1000, order: 10 },
 ];
 
 @Component({
@@ -33,9 +32,7 @@ export class ListBeerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  deleteProduct(product: PeriodicElement): void {
-    console.log('delete:' + product);
-    console.log(product);
+  deleteProduct(product: BeerBasicInfo): void {
     let index: number = this.data.findIndex(d => d === product);
     this.data.splice(index, 1)
     this.dataSource.data = this.data

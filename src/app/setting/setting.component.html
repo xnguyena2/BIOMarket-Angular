@@ -2,10 +2,65 @@
   <div class="container-sub">
     <app-upload-image #imageManager title="Pannel Images:"></app-upload-image>
     <div class="setting-container">
-      <p>Setting:</p>
-      <div class="setting-container-wrapper">
-        <label for="bgColor" style="padding-right: 10px;">Background Color :</label>
-        <input type="color" id="bgColor" value="#0427a7">
+      <div>
+        <p class="bolder-label">Setting:</p>
+        <div class="setting-container-wrapper container-wrapper">
+          <label for="bgColor" style="padding-right: 10px;">Background Color :</label>
+          <input type="color" #colorSelector id="bgColor" value="#0427a7">
+        </div>
+        <div class="container-wrapper">
+          <div class="input-field">
+            <input type="submit" class="submit-btn" value="Lưu Màu" (click)="saveDeviceColor(colorSelector.value)">
+          </div>
+        </div>
+      </div>
+      <div class="sperator"></div>
+      <div>
+        <p class="bolder-label">Ship:</p>
+        <div class="container-wrapper">
+          <div class="input-field">
+            <label>Khối Lượng Quy Đổi:</label>
+            <input type="number" [(ngModel)]='ghn.weigitExchange' class="input">
+          </div>
+        </div>
+        <div class="shipping-provider-container-wrapper container-wrapper">
+          <div class="shipping-provider-location-container" *ngFor="let package of ghn.listPackagePriceDetail; let i = index;">
+            <div class="input-field">
+              <label>Tuyến</label>
+              <div class="category-select">
+                <select [(ngModel)]='package.reciverLocation' class="select">
+                  <option value="">--Chọn--</option>
+                  <option value="INSIDE_REGION">Nội Thành</option>
+                  <option value="OUTSIDE_REGION_TYPE1">Ngoại Thành 1</option>
+                  <option value="OUTSIDE_REGION_TYPE2">Ngoại Thành 2</option>
+                  <option value="INSIDE_GREGION">Nội Vùng</option>
+                  <option value="DIFFIRENT_GPREGION">Liên Vùng</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-field">
+              <label>Khối Lượng(Kg):</label>
+              <input type="number" [(ngModel)]='package.maxWeight' class="input">
+            </div>
+            <div class="input-field">
+              <label>Giá:</label>
+              <input type="number" [(ngModel)]='package.priceMaxWeight' class="input">
+            </div>
+            <div class="input-field">
+              <label>Khối Lượng Thêm(Kg):</label>
+              <input type="number" [(ngModel)]='package.nextWeight' class="input">
+            </div>
+            <div class="input-field">
+              <label>Giá Một Đơn Vị Thêm:</label>
+              <input type="number" [(ngModel)]='package.priceNextWeight' class="input">
+            </div>
+          </div>
+        </div>
+        <div class="container-wrapper">
+          <div class="input-field">
+            <input type="submit" class="submit-btn" value="Lưu Shipping-Provider">
+          </div>
+        </div>
       </div>
       </div>
   </div>
