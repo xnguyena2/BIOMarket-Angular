@@ -67,7 +67,7 @@
         </div>
         <fa-icon [icon]="faPlus" class="add-beer-type" (click)='addnewUnit()'></fa-icon>
         <div class="input-field">
-          <input type="submit" class="submit-btn" (click)='submitBeer()'>
+          <input type="submit" class="submit-btn" [disabled]='isDisableSubmitButton' (click)='submitBeer()'>
         </div>
       </div>
     </div>

@@ -4,6 +4,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import { RequestService } from '../services/request.service';
+
+import { AppConfig } from '../config';
+
+import { HttpResponse } from '@angular/common/http';
+
 export interface BeerBasicInfo {
   id:string;
   name: string;
@@ -27,9 +33,37 @@ export class ListBeerComponent implements OnInit {
   faTrash = faTrash
   faPlus = faPlus
 
-  constructor() { }
+  constructor(private requestServices:RequestService) { }
 
   ngOnInit(): void {
+    this.requestServices.post(AppConfig.BaseUrl + 'beer/getall', {
+      page: 0,
+      size: 100
+    }).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          this.loadData(event.body);
+        }
+      },
+      err => {
+        console.log('Could not get all Voucher!');
+        console.log(err);
+
+      });
+  }
+
+  loadData(response: any) {
+    for (let v of response) {
+      let voucher: BeerBasicInfo = {
+        id: v.id,
+        name: v.name,
+        sold: v.sold,
+        order: v.order
+      };
+      this.data.push(voucher);
+    }
+    this.dataSource.data = this.data
   }
 
   deleteProduct(product: BeerBasicInfo): void {

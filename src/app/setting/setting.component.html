@@ -6,16 +6,16 @@
         <p class="bolder-label">Setting:</p>
         <div class="setting-container-wrapper container-wrapper">
           <label for="bgColor" style="padding-right: 10px;">Background Color :</label>
-          <input type="color" #colorSelector id="bgColor" value="#0427a7">
+          <input type="color" [(ngModel)]='deviceColor' id="bgColor">
         </div>
         <div class="container-wrapper">
           <div class="input-field">
-            <input type="submit" class="submit-btn" value="Lưu Màu" (click)="saveDeviceColor(colorSelector.value)">
+            <input type="submit" class="submit-btn" value="Lưu Màu" (click)="saveDeviceColor()">
           </div>
         </div>
       </div>
       <div class="sperator"></div>
-      <div>
+      <div *ngIf='ghn'>
         <p class="bolder-label">Ship:</p>
         <div class="container-wrapper">
           <div class="input-field">
@@ -58,10 +58,14 @@
         </div>
         <div class="container-wrapper">
           <div class="input-field">
-            <input type="submit" class="submit-btn" value="Lưu Shipping-Provider">
+            <input type="submit" class="submit-btn" value="Lưu Shipping-Provider" (click)='saveShipProvider()'>
           </div>
         </div>
       </div>
       </div>
+  </div>
+  <div class="alert-container">
+    <ngb-alert #selfClosingAlert *ngIf="alertMessage" type="{{alertType}}" (closed)="alertMessage = ''">{{ alertMessage }}
+    </ngb-alert>
   </div>
 </div>

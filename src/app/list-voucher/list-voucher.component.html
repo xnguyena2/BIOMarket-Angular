@@ -1,0 +1,46 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 content-table">
+
+  <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="ID">
+    <th mat-header-cell *matHeaderCellDef class="table-header-col"> ID </th>
+    <td mat-cell *matCellDef="let element"> <a [routerLink]="['voucherdetail', element.id]">{{element.id}}</a> </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="code">
+    <th mat-header-cell *matHeaderCellDef class="table-header-col"> Mã </th>
+    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="detail">
+    <th mat-header-cell *matHeaderCellDef class="table-header-col"> Chi Tiết </th>
+    <td mat-cell *matCellDef="let element"> {{element.detail}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="discount">
+    <th mat-header-cell *matHeaderCellDef class="table-header-col"> Discount </th>
+    <td mat-cell *matCellDef="let element"> {{element.discount}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef class="table-header-col"> Xóa </th>
+    <td mat-cell *matCellDef="let element">
+      <fa-icon [icon]="faTrash" class="delete-image" (click)="deleteVoucher(element)"></fa-icon>
+    </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="add">
+    <th mat-header-cell *matHeaderCellDef class="table-header-col"><a [routerLink]="['voucherdetail', 'newVoucher']"><fa-icon [icon]="faPlus" class="add-beer"></fa-icon></a></th>
+    <td mat-cell *matCellDef="let element"></td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-rows"></tr>
+</table>

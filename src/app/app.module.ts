@@ -21,6 +21,12 @@ import { BeerDetailComponent } from './beer-detail/beer-detail.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ListBeerComponent } from './list-beer/list-beer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { VoucherComponent } from './voucher/voucher.component';
+import { NotificationComponent } from './notification/notification.component';
+import { VoucherDetailComponent } from './voucher-detail/voucher-detail.component';
+import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
+import { ListVoucherComponent } from './list-voucher/list-voucher.component';
+import { ListNotificationComponent } from './list-notification/list-notification.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +40,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     UploadImageComponent,
     BeerDetailComponent,
     PageNotFoundComponent,
-    ListBeerComponent
+    ListBeerComponent,
+    VoucherComponent,
+    NotificationComponent,
+    VoucherDetailComponent,
+    NotificationDetailComponent,
+    ListVoucherComponent,
+    ListNotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +60,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         path: 'beers', component: BeersComponent, children: [
           {
             path: '',
-            component: ListBeerComponent},
+            component: ListBeerComponent
+          },
           {
             path: 'beerdetail/:beerId',
             component: BeerDetailComponent
@@ -58,6 +71,19 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       { path: 'orders', component: OrdersComponent },
       { path: 'setting', component: SettingComponent },
       { path: 'images', component: ImagesComponent },
+      {
+        path: 'voucher', component: VoucherComponent, children: [
+          {
+            path: '',
+            component: ListVoucherComponent
+          },
+          {
+            path: 'voucherdetail/:voucherId',
+            component: VoucherDetailComponent
+          }
+        ]
+      },
+      { path: 'notification', component: NotificationComponent },
       { path: '**', component: PageNotFoundComponent }
     ]),
     BrowserAnimationsModule,

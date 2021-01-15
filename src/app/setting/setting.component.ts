@@ -1,13 +1,19 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 
+import {Subject} from 'rxjs';
 import { from } from 'rxjs';
 import { UploadImageComponent } from '../upload-image/upload-image.component';
 
-import {DeviceconfigService} from '../services/deviceconfig.service'
+import { RequestService } from '../services/request.service';
 
-export interface DeviceConfigData{
-  color:string
+import { AppConfig } from '../config';
+import { NgbAlert} from '@ng-bootstrap/ng-bootstrap';
+
+import {debounceTime} from 'rxjs/operators';
+
+export interface DeviceConfigData {
+  color: string
 }
 
 interface PackagePrice {
@@ -20,10 +26,15 @@ interface PackagePrice {
   priceNextWeight: number;
 }
 
-interface ShippingProvider {
+export interface ShippingProvider {
   weigitExchange: number;
 
   listPackagePriceDetail: PackagePrice[];
+}
+
+interface ShippingProviderData{
+  id:string;
+  json:string;
 }
 
 @Component({
@@ -31,76 +42,115 @@ interface ShippingProvider {
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.css']
 })
-export class SettingComponent implements AfterViewInit {
+export class SettingComponent implements AfterViewInit, OnInit {
 
-  ghn: ShippingProvider = {
-    weigitExchange: 0.0002,
-    listPackagePriceDetail: [{
-      reciverLocation: "INSIDE_REGION",
-      maxWeight: 3,
-      priceMaxWeight: 20000,
-      nextWeight: 0.5,
-      priceNextWeight: 5000
-    },
-    {
-      reciverLocation: "OUTSIDE_REGION_TYPE1",
-      maxWeight: 3,
-      priceMaxWeight: 20000,
-      nextWeight: 0.5,
-      priceNextWeight: 5000
-    },
-    {
-      reciverLocation: "OUTSIDE_REGION_TYPE2",
-      maxWeight: 3,
-      priceMaxWeight: 20000,
-      nextWeight: 0.5,
-      priceNextWeight: 5000
-    },
-    {
-      reciverLocation: "INSIDE_GREGION",
-      maxWeight: 3,
-      priceMaxWeight: 20000,
-      nextWeight: 0.5,
-      priceNextWeight: 5000
-    },
-    {
-      reciverLocation: "DIFFIRENT_GPREGION",
-      maxWeight: 3,
-      priceMaxWeight: 20000,
-      nextWeight: 0.5,
-      priceNextWeight: 5000
-    }
-    ]
-  }
+  private _success = new Subject<string>();
+  @ViewChild('selfClosingAlert', {static: false}) selfClosingAlert: NgbAlert;
 
-  colorrrr: string;
+  alertMessage:string;
+  alertType:string;
+
+
+  readonly providerID = "GHN";
+
+  deviceColor: string = "#0427a7";
+
+  ghn: ShippingProvider;
 
   @ViewChild('imageManager') imageManager: UploadImageComponent
 
   carouselPath = 'carousel'
 
-  constructor(private deviceConfig: DeviceconfigService) { }
+  constructor(
+    private requestServices: RequestService) { }
 
   ngAfterViewInit(): void {
     this.imageManager.setPath(this.carouselPath);
     this.imageManager.loadAllImage();
+    this.requestServices.get(AppConfig.BaseUrl+'deviceconfig/get').subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          if (event.body != undefined) {
+            this.deviceColor = event.body.color;
+          }
+        }
+      },
+      err => {
+        console.log('Could not get device config!');
+        console.log(err);
+        this.showAlert('danger','Không thể kết nối máy chủ!!!');
+      });
+    this.requestServices.get(AppConfig.BaseUrl+'shippingprovider/get/'+this.providerID).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          if(event.body != undefined && event.body.config != undefined){
+            this.ghn = JSON.parse(event.body.config);
+          }else{
+            this.ghn = AppConfig.GHN;
+          }
+        }
+      },
+      err => {
+        console.log('Could not get ship provider!');
+        console.log(err);
+        this.showAlert('danger','Không thể kết nối máy chủ!!!');
+      });
   }
 
-  saveDeviceColor(color:string):void{
-    console.log(color);
-    this.deviceConfig.changeDeviceConfig({
-      color:color
+  ngOnInit() {
+    this._success.subscribe(message => this.alertMessage = message);
+    this._success.pipe(debounceTime(5000)).subscribe(() => {
+      if (this.selfClosingAlert) {
+        this.selfClosingAlert.close();
+      }
+    });
+  }
+
+
+  saveDeviceColor(): void {
+    console.log(this.deviceColor);
+    this.requestServices.post(AppConfig.BaseUrl+'deviceconfig/changecolor',
+    {
+      color: this.deviceColor
     }).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
+          this.showAlert('success','Lưu màu thành công!!!');
         }
       },
       err => {
-        console.log('Could not generate beer ID!');
+        console.log('Could not save color!');
         console.log(err);
-
+        this.showAlert('danger','Không thể lưu cài đặt!!!');
       });
+  }
+
+  saveShipProvider():void{
+    let submitData:ShippingProviderData = {
+      id : this.providerID,
+      json: JSON.stringify(this.ghn)
+    }
+    this.requestServices.post(AppConfig.BaseUrl+'shippingprovider/update', submitData)
+    .subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          this.showAlert('success','Lưu shipping-provider thành công!!!');
+        }
+      },
+      err => {
+        console.log('Could not save shipping provider!');
+        console.log(err);
+        this.showAlert('danger','Không thể lưu cài đặt!!!');
+      });
+  }
+
+  public showAlert(type:string, msg:string) {
+    this.alertType = type;
+    this._success.next(msg);
   }
 
 }

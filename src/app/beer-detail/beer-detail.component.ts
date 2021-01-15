@@ -4,9 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { UploadImageComponent } from '../upload-image/upload-image.component';
-import { BeerService } from '../services/beer.service'
+import { RequestService } from '../services/request.service';
 
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { AppConfig } from '../config';
+
+import { HttpResponse } from '@angular/common/http';
 
 import { NgbDateStruct, NgbCalendar , NgbAlert} from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,6 +23,7 @@ interface BeerUnit {
   dateExpir: NgbDateStruct;
   weight: number;
   volumetric:number;
+  beer_unit_second_id:string;
 }
 
 export interface BeerDetail {
@@ -46,6 +49,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   alertMessage:string;
   alertType:string;
 
+  isDisableSubmitButton:boolean;
   beerName: string;
   beerDetail: string;
   beerCategory: any;
@@ -66,7 +70,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   beerID: string;
 
   constructor(private route: ActivatedRoute,
-    private beerAPI: BeerService,
+    private requestServices: RequestService,
     private calendar: NgbCalendar) { }
 
 
@@ -79,11 +83,15 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
     const beerIdFromRoute = this.route.snapshot.paramMap.get('beerId');
     this.beerID = beerIdFromRoute;
     if (this.showConfigView()) {
+      //should load beer detail
+      this.isDisableSubmitButton=false;
     } else {
-      this.beerAPI.getBeerID().subscribe(
+      this.isDisableSubmitButton = true;
+      this.requestServices.get(AppConfig.BaseUrl+'beer/generateid').subscribe(
         event => {
           if (event instanceof HttpResponse) {
             console.log(event.body);
+            this.isDisableSubmitButton = false;
             this.beerID = event.body.response;
             this.addnewUnit();
           }
@@ -110,7 +118,8 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       discount: 0,
       weight: 0,
       volumetric: 0,
-      dateExpir: null
+      dateExpir: null,
+      beer_unit_second_id:null
     };
   }
 
@@ -129,6 +138,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   }
 
   submitBeer() {
+    this.isDisableSubmitButton = true;
     this.listUnits.forEach((value,index)=>{
       value.beer = this.beerID;
     });
@@ -141,16 +151,24 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
     }
     //console.log(JSON.stringify(submitData));
 
-    this.beerAPI.submitBeer(submitData).subscribe(
+    this.requestServices.post(AppConfig.BaseUrl+'beer/create', submitData).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
+          for(let beerUnit of event.body){
+            let beerU: BeerUnit = this.listUnits.find(bu => bu.name === beerUnit.name);
+            if(beerU!=undefined){
+              beerU.beer_unit_second_id = beerUnit.beer_unit_second_id;
+            }
+          }
+          this.isDisableSubmitButton = false;
           this.showAlert('success','Lưu sản phẩm thành công!!!');
         }
       },
       err => {
         console.log('Could not save beer!');
         console.log(err);
+        this.isDisableSubmitButton = false;
         this.showAlert('danger','Không thể lưu sản phẩm!!!');
       });
 

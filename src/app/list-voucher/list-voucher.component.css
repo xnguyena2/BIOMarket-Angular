@@ -18,6 +18,17 @@
   cursor: pointer;
   color: white;
 }
+th{
+  text-align: center;
+}
+td{
+  max-width: 150px;
+  padding: 10px;
+  vertical-align: middle;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
 .delete-image{
   cursor: pointer;
 }

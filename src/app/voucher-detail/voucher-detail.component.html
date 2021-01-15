@@ -1,0 +1,77 @@
+<div *ngIf="showConfigView()">
+  <div class="form-container">
+    <div class="input-container">
+      <div class="sub-input">
+        <div class="input-field">
+          <label>Mã Voucher:</label>
+          <input type="text" class="input" [(ngModel)]='voucherName' required>
+        </div>
+        <div class="input-field">
+          <label>Thông Tin Chi Tiết:</label>
+          <textarea class="textarea" [(ngModel)]='voucherDetail' required></textarea>
+        </div>
+        <div class="input-field">
+          <label>Tiền Giảm:</label>
+          <input type="number" class="input" [(ngModel)]='voucherAmount' required>
+        </div>
+        <div class="input-field">
+          <label>Discount(%):</label>
+          <input type="number" class="input" [(ngModel)]='voucherDiscount' required>
+        </div>
+        <div class="input-field">
+          <label>Hạn Giảm Giá:</label>
+          <div class="form-group">
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd"
+                     name="dp" [(ngModel)]="dateExpir" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="input-field">
+          <input type="submit" class="submit-btn" (click)='submitVoucher()'>
+        </div>
+      </div>
+      <div class="user-beer-input">
+        <div class="input-field">
+          <input type="text" class="input" #newUserID required placeholder="User ID">
+          <fa-icon [icon]="faPlus" class="add-beer-type" (click)='addnewUser(newUserID.value);newUserID.value=""'></fa-icon>
+        </div>
+        <div *ngFor="let user of listUser; let i = index;">
+          <div class="sparater"></div>
+          <div class="product-type">
+            <div class="id-input-field-label">
+              <label>{{user}}</label>
+            </div>
+            <div class="input-field">
+              <fa-icon [icon]="faTrash" class="sub-beer-type" (click)='removeUser(i)'></fa-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="user-beer-input">
+        <div class="input-field">
+          <input type="text" class="input" #newBeerID required placeholder="Beer ID">
+          <fa-icon [icon]="faPlus" class="add-beer-type" (click)='addnewBeer(newBeerID.value);newBeerID.value=""'></fa-icon>
+        </div>
+        <div *ngFor="let beer of listBeer; let i = index;">
+          <div class="sparater"></div>
+          <div class="product-type">
+            <div class="id-input-field-label">
+              <label>{{beer}}</label>
+            </div>
+            <div class="input-field">
+              <fa-icon [icon]="faTrash" class="sub-beer-type" (click)='removeBeer(i)'></fa-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert-container">
+    <ngb-alert #selfClosingAlert *ngIf="alertMessage" type="{{alertType}}" (closed)="alertMessage = ''">{{ alertMessage }}
+    </ngb-alert>
+  </div>
+</div>

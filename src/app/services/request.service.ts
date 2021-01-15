@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 
-import { AppConfig } from '../config'
 import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BeerDetail } from '../beer-detail/beer-detail.component';
+
+
+import {ShippingProvider, DeviceConfigData} from '../setting/setting.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BeerService {
+export class RequestService {
 
-  private baseUrl = AppConfig.BaseUrl+'beer/';
   constructor(private http: HttpClient) { }
 
 
-  getBeerID(): Observable<HttpEvent<any>> {
+  get(url:string): Observable<HttpEvent<any>> {
 
-    const req = new HttpRequest('GET', `${this.baseUrl+"generateid"}`, {
+    const req = new HttpRequest('GET', `${url}`, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -24,9 +24,9 @@ export class BeerService {
     return this.http.request(req);
   }
 
-  submitBeer(submitData: BeerDetail): Observable<HttpEvent<any>> {
+  post(url:string, submitData: any): Observable<HttpEvent<any>> {
 
-    const req = new HttpRequest('POST', `${this.baseUrl+"create"}`, submitData, {
+    const req = new HttpRequest('POST', `${url}`, submitData, {
       reportProgress: true,
       responseType: 'json'
     });
