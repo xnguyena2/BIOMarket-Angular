@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table'
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +27,13 @@ import { VoucherDetailComponent } from './voucher-detail/voucher-detail.componen
 import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
 import { ListVoucherComponent } from './list-voucher/list-voucher.component';
 import { ListNotificationComponent } from './list-notification/list-notification.component';
+import { LoginComponent } from './login/login.component';
+import { AuthInterceptor } from './Injectable/AuthInterceptor ';
+import { OrderdetailComponent } from './orderdetail/orderdetail.component';
+
+const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+];
 
 @NgModule({
   declarations: [
@@ -46,7 +53,9 @@ import { ListNotificationComponent } from './list-notification/list-notification
     VoucherDetailComponent,
     NotificationDetailComponent,
     ListVoucherComponent,
-    ListNotificationComponent
+    ListNotificationComponent,
+    LoginComponent,
+    OrderdetailComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +63,7 @@ import { ListNotificationComponent } from './list-notification/list-notification
     AppRoutingModule,
     FontAwesomeModule,
     RouterModule.forRoot([
-      { path: '', redirectTo: '/users', pathMatch: 'full' },
+      { path: '', redirectTo: '/beers', pathMatch: 'full' },
       { path: 'users', component: UsersComponent },
       {
         path: 'beers', component: BeersComponent, children: [
@@ -84,6 +93,7 @@ import { ListNotificationComponent } from './list-notification/list-notification
         ]
       },
       { path: 'notification', component: NotificationComponent },
+      { path: 'login', component: LoginComponent },
       { path: '**', component: PageNotFoundComponent }
     ]),
     BrowserAnimationsModule,
@@ -91,7 +101,7 @@ import { ListNotificationComponent } from './list-notification/list-notification
     NgbModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

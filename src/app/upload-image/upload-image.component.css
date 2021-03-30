@@ -82,8 +82,14 @@
 
 .delete-image{
   position: absolute;
+  cursor: pointer;
   right: 10px;
   top: 10px;
+  transition: all 0.35s ease;
+}
+
+.delete-image:active{
+  transform: scale(0.8);
 }
 
 .progress-cont {

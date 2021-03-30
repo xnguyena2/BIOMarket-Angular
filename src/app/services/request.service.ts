@@ -33,4 +33,14 @@ export class RequestService {
 
     return this.http.request(req);
   }
+
+  delete(url:string): Observable<HttpEvent<any>> {
+
+    const req = new HttpRequest('DELETE', `${url}`, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
 }

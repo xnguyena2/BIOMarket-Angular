@@ -1,0 +1,16 @@
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px;
+}
+form{
+  display: block;
+  margin-top:100px;
+}
+input{
+  display: block;
+  padding: 10px;
+  outline: none;
+  border: 1px solid rgb(155, 155, 155);
+}

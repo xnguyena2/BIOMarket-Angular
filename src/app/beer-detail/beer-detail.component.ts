@@ -10,31 +10,12 @@ import { AppConfig } from '../config';
 
 import { HttpResponse } from '@angular/common/http';
 
-import { NgbDateStruct, NgbCalendar , NgbAlert} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbCalendar, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 
-import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-
-interface BeerUnit {
-  beer: string;
-  name: string;
-  price: number;
-  discount: number;
-  dateExpir: NgbDateStruct;
-  weight: number;
-  volumetric:number;
-  beer_unit_second_id:string;
-}
-
-export interface BeerDetail {
-  beerSecondID: string;
-  name: string;
-  detail: string;
-  category: string;
-
-  listUnit: BeerUnit[];
-}
-
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { APIService } from '../services/api.service';
+import { BeerDetail, BeerUnit } from '../object/BeerDetail';
 
 @Component({
   selector: 'app-beer-detail',
@@ -44,12 +25,12 @@ export interface BeerDetail {
 export class BeerDetailComponent implements AfterViewInit, OnInit {
 
   private _success = new Subject<string>();
-  @ViewChild('selfClosingAlert', {static: false}) selfClosingAlert: NgbAlert;
+  @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert: NgbAlert;
 
-  alertMessage:string;
-  alertType:string;
+  alertMessage: string;
+  alertType: string;
 
-  isDisableSubmitButton:boolean;
+  isDisableSubmitButton: boolean;
   beerName: string;
   beerDetail: string;
   beerCategory: any;
@@ -62,7 +43,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   @ViewChild('imageManager')
   set imgUploadManager(imageManager: UploadImageComponent) {
     if (imageManager !== undefined) {
-      imageManager.setPath(`beer/${this.beerID}/img`);
+      imageManager.setPath(`beer/admin/${this.beerID}/img`);
       imageManager.loadAllImage();
     }
   }
@@ -71,7 +52,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
 
   constructor(private route: ActivatedRoute,
     private requestServices: RequestService,
-    private calendar: NgbCalendar) { }
+    private api: APIService) { }
 
 
 
@@ -82,18 +63,25 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     const beerIdFromRoute = this.route.snapshot.paramMap.get('beerId');
     this.beerID = beerIdFromRoute;
+    this.isDisableSubmitButton = true;
     if (this.showConfigView()) {
       //should load beer detail
-      this.isDisableSubmitButton=false;
+      this.api.GetProductDetail(this.beerID, result => {
+        if (result) {
+          this.beerName = result.name;
+          this.beerDetail = result.detail;
+          this.beerCategory = result.category;
+          this.listUnits = result.listUnit;
+          this.isDisableSubmitButton = false;
+        }
+      });
     } else {
-      this.isDisableSubmitButton = true;
-      this.requestServices.get(AppConfig.BaseUrl+'beer/generateid').subscribe(
+      this.requestServices.get(AppConfig.BaseUrl + 'beer/admin/generateid').subscribe(
         event => {
           if (event instanceof HttpResponse) {
             console.log(event.body);
-            this.isDisableSubmitButton = false;
             this.beerID = event.body.response;
-            this.addnewUnit();
+            this.isDisableSubmitButton = false;
           }
         },
         err => {
@@ -110,6 +98,10 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
     });
   }
 
+  showConfigView(): boolean {
+    return this.beerID !== 'newBeer';
+  }
+
   getDefaultUnit(): BeerUnit {
     return {
       beer: '',
@@ -119,12 +111,8 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       weight: 0,
       volumetric: 0,
       dateExpir: null,
-      beer_unit_second_id:null
+      beer_unit_second_id: null
     };
-  }
-
-  showConfigView(): boolean {
-    return this.beerID !== 'newBeer';
   }
 
   addnewUnit() {
@@ -139,7 +127,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
 
   submitBeer() {
     this.isDisableSubmitButton = true;
-    this.listUnits.forEach((value,index)=>{
+    this.listUnits.forEach((value, index) => {
       value.beer = this.beerID;
     });
     let submitData: BeerDetail = {
@@ -147,33 +135,36 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       beerSecondID: this.beerID,
       detail: this.beerDetail,
       category: this.beerCategory,
-      listUnit: this.listUnits
+      listUnit: this.listUnits,
+      images: []
     }
     //console.log(JSON.stringify(submitData));
 
-    this.requestServices.post(AppConfig.BaseUrl+'beer/create', submitData).subscribe(
+    console.log(submitData);
+
+    this.requestServices.post(AppConfig.BaseUrl + 'beer/admin/create', submitData).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
-          for(let beerUnit of event.body){
+          for (let beerUnit of event.body) {
             let beerU: BeerUnit = this.listUnits.find(bu => bu.name === beerUnit.name);
-            if(beerU!=undefined){
+            if (beerU != undefined) {
               beerU.beer_unit_second_id = beerUnit.beer_unit_second_id;
             }
           }
           this.isDisableSubmitButton = false;
-          this.showAlert('success','Lưu sản phẩm thành công!!!');
+          this.showAlert('success', 'Lưu sản phẩm thành công!!!');
         }
       },
       err => {
         console.log('Could not save beer!');
         console.log(err);
         this.isDisableSubmitButton = false;
-        this.showAlert('danger','Không thể lưu sản phẩm!!!');
+        this.showAlert('danger', 'Không thể lưu sản phẩm!!!');
       });
 
   }
-  public showAlert(type:string, msg:string) {
+  public showAlert(type: string, msg: string) {
     this.alertType = type;
     this._success.next(msg);
   }

@@ -1,9 +1,10 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { UploadFileService } from 'src/app/services/upload-file.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { AppConfig } from '../config'
+import { Image } from '../object/BeerDetail';
 
 @Component({
   selector: 'app-upload-image',
@@ -15,7 +16,7 @@ export class UploadImageComponent implements OnInit {
   @Input() title: string;
   path: string;
 
-  files: any[] = [];
+  files: Image[] = [];
   faTrash = faTrash
 
   constructor(private uploadService: UploadFileService) { }
@@ -23,12 +24,12 @@ export class UploadImageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  setPath(p:string):void{
+  setPath(p: string): void {
     this.path = p;
   }
 
-  loadAllImage(){
-    this.getAllImage(this.path+'/all');
+  loadAllImage() {
+    this.getAllImage(this.path + '/all');
   }
 
   fileBrowseHandler(files) {
@@ -42,7 +43,7 @@ export class UploadImageComponent implements OnInit {
   deleteFile(index: number) {
 
     let file = this.files[index];
-    this.uploadService.deleteFile(this.path+'/delete', file.ImageID).subscribe(
+    this.uploadService.deleteFile(this.path + '/delete', file.imgid).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
         } else if (event instanceof HttpResponse) {
@@ -83,14 +84,16 @@ export class UploadImageComponent implements OnInit {
     file.progress = 0;
     file.processing = true;
 
-    this.uploadService.upload(file, this.path+'/upload').subscribe(
+    this.uploadService.upload(file, this.path + '/upload').subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           file.progress = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
-          console.log(event.body.body);
+          const newImg: Image = event.body;
+          console.log(newImg);
+          file.imgid = newImg.imgid;
+          file.large = newImg.large;
           file.processing = false;
-          file.ImageID = event.body.body.response;
         }
       },
       err => {
@@ -101,21 +104,14 @@ export class UploadImageComponent implements OnInit {
       });
   }
 
-  getAllImage(path: string):void{
+  getAllImage(path: string): void {
 
     this.uploadService.getFile(path).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
         } else if (event instanceof HttpResponse) {
           console.log(event.body);
-          for (const img of event.body) {
-            let imgID = img.id;
-            console.log(imgID);
-
-            let item = {url:'', processing: false, ImageID:imgID}
-            item.url = AppConfig.BaseUrl+'image/'+imgID;
-            this.files.push(item);
-          }
+          this.files = event.body;
         }
       },
       err => {

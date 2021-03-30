@@ -1,0 +1,7 @@
+<div class="container">
+  <form action="">
+    <input class="text-input" type="text" name="username" id="username" placeholder="username" #username>
+    <input class="text-input" type="password" name="password" id="password" placeholder="password" #pw>
+    <input class="btn-input" type="button" value="Đăng nhập" (click)="login(username.value, pw.value)">
+  </form>
+</div>

@@ -1,0 +1,37 @@
+.content-table{
+  width: 95%;
+  margin: 25px auto;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  min-width: 600px;
+}
+.table-header{
+  background-color: #009879;
+}
+.table-header-col{
+  color: white;
+}
+.row-rows:nth-of-type(even){
+  background-color: #f3f3f3;
+}
+.add-beer{
+  cursor: pointer;
+  color: white;
+}
+.delete-image{
+  cursor: pointer;
+}
+.refresh{
+  color: white;
+  background-color: rgb(22, 123, 238);
+  padding: 10px 15px;
+  margin-left: 25px;
+  margin-top: 10px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.4s ease;
+}
+.refresh:active{
+  transform: scale(0.9);
+}
