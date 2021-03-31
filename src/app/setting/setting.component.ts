@@ -1,16 +1,13 @@
 import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 
-import {Subject} from 'rxjs';
-import { from } from 'rxjs';
 import { UploadImageComponent } from '../upload-image/upload-image.component';
 
 import { RequestService } from '../services/request.service';
 
 import { AppConfig } from '../config';
-import { NgbAlert} from '@ng-bootstrap/ng-bootstrap';
 
-import {debounceTime} from 'rxjs/operators';
+import { AppService } from '../services/app.service';
 
 export interface DeviceConfigData {
   color: string
@@ -44,9 +41,6 @@ interface ShippingProviderData{
 })
 export class SettingComponent implements AfterViewInit, OnInit {
 
-  private _success = new Subject<string>();
-  @ViewChild('selfClosingAlert', {static: false}) selfClosingAlert: NgbAlert;
-
   alertMessage:string;
   alertType:string;
 
@@ -62,7 +56,8 @@ export class SettingComponent implements AfterViewInit, OnInit {
   carouselPath = 'carousel/admin'
 
   constructor(
-    private requestServices: RequestService) { }
+    private requestServices: RequestService,
+    private app: AppService) { }
 
   ngAfterViewInit(): void {
     this.imageManager.setPath(this.carouselPath);
@@ -79,7 +74,7 @@ export class SettingComponent implements AfterViewInit, OnInit {
       err => {
         console.log('Could not get device config!');
         console.log(err);
-        this.showAlert('danger','Không thể kết nối máy chủ!!!');
+        this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
       });
     this.requestServices.get(AppConfig.BaseUrl+'shippingprovider/admin/get/'+this.providerID).subscribe(
       event => {
@@ -95,17 +90,11 @@ export class SettingComponent implements AfterViewInit, OnInit {
       err => {
         console.log('Could not get ship provider!');
         console.log(err);
-        this.showAlert('danger','Không thể kết nối máy chủ!!!');
+        this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
       });
   }
 
   ngOnInit() {
-    this._success.subscribe(message => this.alertMessage = message);
-    this._success.pipe(debounceTime(5000)).subscribe(() => {
-      if (this.selfClosingAlert) {
-        this.selfClosingAlert.close();
-      }
-    });
   }
 
 
@@ -118,13 +107,13 @@ export class SettingComponent implements AfterViewInit, OnInit {
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
-          this.showAlert('success','Lưu màu thành công!!!');
+          this.app.changeNotification('Lưu màu thành công!!!');
         }
       },
       err => {
         console.log('Could not save color!');
         console.log(err);
-        this.showAlert('danger','Không thể lưu cài đặt!!!');
+        this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
       });
   }
 
@@ -138,19 +127,14 @@ export class SettingComponent implements AfterViewInit, OnInit {
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
-          this.showAlert('success','Lưu shipping-provider thành công!!!');
+          this.app.changeNotification('Lưu shipping-provider thành công!!!');
         }
       },
       err => {
         console.log('Could not save shipping provider!');
         console.log(err);
-        this.showAlert('danger','Không thể lưu cài đặt!!!');
+        this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
       });
-  }
-
-  public showAlert(type:string, msg:string) {
-    this.alertType = type;
-    this._success.next(msg);
   }
 
 }

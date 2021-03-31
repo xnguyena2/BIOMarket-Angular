@@ -10,12 +10,10 @@ import { AppConfig } from '../config';
 
 import { HttpResponse } from '@angular/common/http';
 
-import { NgbDateStruct, NgbCalendar, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { APIService } from '../services/api.service';
 import { BeerDetail, BeerUnit } from '../object/BeerDetail';
+import { AppService } from '../services/app.service';
 
 @Component({
   selector: 'app-beer-detail',
@@ -23,9 +21,6 @@ import { BeerDetail, BeerUnit } from '../object/BeerDetail';
   styleUrls: ['./beer-detail.component.css']
 })
 export class BeerDetailComponent implements AfterViewInit, OnInit {
-
-  private _success = new Subject<string>();
-  @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert: NgbAlert;
 
   alertMessage: string;
   alertType: string;
@@ -52,6 +47,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
 
   constructor(private route: ActivatedRoute,
     private requestServices: RequestService,
+    private app: AppService,
     private api: APIService) { }
 
 
@@ -90,12 +86,6 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
 
         });
     }
-    this._success.subscribe(message => this.alertMessage = message);
-    this._success.pipe(debounceTime(5000)).subscribe(() => {
-      if (this.selfClosingAlert) {
-        this.selfClosingAlert.close();
-      }
-    });
   }
 
   showConfigView(): boolean {
@@ -153,20 +143,15 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
             }
           }
           this.isDisableSubmitButton = false;
-          this.showAlert('success', 'Lưu sản phẩm thành công!!!');
+          this.app.changeNotification('Lưu sản phẩm thành công!!!');
         }
       },
       err => {
         console.log('Could not save beer!');
         console.log(err);
         this.isDisableSubmitButton = false;
-        this.showAlert('danger', 'Không thể lưu sản phẩm!!!');
+        this.app.changeNotification('Error: Không thể lưu sản phẩm!!!');
       });
 
   }
-  public showAlert(type: string, msg: string) {
-    this.alertType = type;
-    this._success.next(msg);
-  }
-
 }

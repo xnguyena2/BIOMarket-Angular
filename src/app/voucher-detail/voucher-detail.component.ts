@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { RequestService } from '../services/request.service';
@@ -6,10 +6,8 @@ import { RequestService } from '../services/request.service';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
-import { NgbDateStruct , NgbAlert} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
-import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-voucher-detail',
@@ -17,9 +15,6 @@ import {debounceTime} from 'rxjs/operators';
   styleUrls: ['./voucher-detail.component.css']
 })
 export class VoucherDetailComponent implements OnInit {
-
-  private _success = new Subject<string>();
-  @ViewChild('selfClosingAlert', {static: false}) selfClosingAlert: NgbAlert;
 
   alertMessage:string;
   alertType:string;
@@ -46,12 +41,6 @@ export class VoucherDetailComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this._success.subscribe(message => this.alertMessage = message);
-    this._success.pipe(debounceTime(5000)).subscribe(() => {
-      if (this.selfClosingAlert) {
-        this.selfClosingAlert.close();
-      }
-    });
   }
 
   showConfigView(): boolean {
@@ -80,9 +69,5 @@ export class VoucherDetailComponent implements OnInit {
 
   submitVoucher():void{
 
-  }
-  showAlert(type:string, msg:string) {
-    this.alertType = type;
-    this._success.next(msg);
   }
 }
