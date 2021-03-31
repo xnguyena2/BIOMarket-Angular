@@ -1,5 +1,5 @@
 export const AppConfig = {
-  BaseUrl : "http://localhost:5000/",
+  BaseUrl : 'https://ancient-coast-10757.herokuapp.com/',//"http://localhost:5000/",
   FilterDrop: [{
     value: 'default',
     title: 'Nổi Bật'
