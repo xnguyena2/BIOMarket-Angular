@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   faBell = faBell;
   faGift = faGift;
 
+  alertType: string;
   alertMessage: string = '';
   showAlter: boolean = false;
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert: NgbAlert;
@@ -37,6 +38,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.app.registerNotification(msg => {
+      if (msg.indexOf('Error:') >= 0) {
+        this.alertType = 'danger';
+      } else {
+        this.alertType = 'success';
+      }
       this.alertMessage = msg;
       this.showAlter = true;
     }, () => {

@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest, HttpRespo
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { ok } from "assert";
-import { EMPTY } from "rxjs";
+import { EMPTY, throwError } from "rxjs";
 import { catchError, finalize, tap } from "rxjs/operators";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
             this.router.navigate(["/login"]);
           }
-          return EMPTY;
+          return throwError(error);
         })
       );
   }
