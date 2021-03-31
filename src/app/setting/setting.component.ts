@@ -59,7 +59,7 @@ export class SettingComponent implements AfterViewInit, OnInit {
 
   @ViewChild('imageManager') imageManager: UploadImageComponent
 
-  carouselPath = 'carousel'
+  carouselPath = 'carousel/admin'
 
   constructor(
     private requestServices: RequestService) { }
@@ -81,7 +81,7 @@ export class SettingComponent implements AfterViewInit, OnInit {
         console.log(err);
         this.showAlert('danger','Không thể kết nối máy chủ!!!');
       });
-    this.requestServices.get(AppConfig.BaseUrl+'shippingprovider/get/'+this.providerID).subscribe(
+    this.requestServices.get(AppConfig.BaseUrl+'shippingprovider/admin/get/'+this.providerID).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
@@ -111,7 +111,7 @@ export class SettingComponent implements AfterViewInit, OnInit {
 
   saveDeviceColor(): void {
     console.log(this.deviceColor);
-    this.requestServices.post(AppConfig.BaseUrl+'deviceconfig/changecolor',
+    this.requestServices.post(AppConfig.BaseUrl+'deviceconfig/admin/changecolor',
     {
       color: this.deviceColor
     }).subscribe(
@@ -133,7 +133,7 @@ export class SettingComponent implements AfterViewInit, OnInit {
       id : this.providerID,
       json: JSON.stringify(this.ghn)
     }
-    this.requestServices.post(AppConfig.BaseUrl+'shippingprovider/update', submitData)
+    this.requestServices.post(AppConfig.BaseUrl+'shippingprovider/admin/update', submitData)
     .subscribe(
       event => {
         if (event instanceof HttpResponse) {

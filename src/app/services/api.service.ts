@@ -8,8 +8,10 @@ import { SearchQuery } from '../object/SearchQuery';
 import { SearchResult } from '../object/SearchResult';
 import { RequestService } from './request.service';
 
-import {Md5} from 'ts-md5/dist/md5';
-import { OrderSearchResult } from '../object/OrderSearchResult';
+import { Md5 } from 'ts-md5/dist/md5';
+import { OrderSearchResult, PackageOrder } from '../object/OrderSearchResult';
+import { AppService } from './app.service';
+import { ObjectID } from '../object/ObjectID';
 
 @Injectable({
   providedIn: 'root'
@@ -17,28 +19,31 @@ import { OrderSearchResult } from '../object/OrderSearchResult';
 export class APIService {
   HostURL = AppConfig.BaseUrl;
 
+  currentOrderResult: OrderSearchResult = null;
+
   constructor(
-    private requestServices: RequestService,) { }
+    private requestServices: RequestService,
+    private appServices: AppService) { }
 
-    public AdminLogin(user: UserInfo, cb: (result: boolean) => void) {
-      const md5 = new Md5();
-      let password = md5.appendStr(user.password).end().toString().toUpperCase();
-      console.log(password);
-      user.password = password;
+  public AdminLogin(user: UserInfo, cb: (result: boolean) => void) {
+    const md5 = new Md5();
+    let password = md5.appendStr(user.password).end().toString().toUpperCase();
+    console.log(password);
+    user.password = password;
 
-      return this.requestServices.post(`${this.HostURL}auth/signin`, user).subscribe(
-        event => {
-          if (event instanceof HttpResponse) {
-            console.log('login result: ');
-            console.log(event.body);
-            cb(true);
-          }
-        },
-        err => {
-          console.log(err);
-          cb(false);
-        });
-    }
+    return this.requestServices.post(`${this.HostURL}auth/signin`, user).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('login result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
 
   private search(searchQuery: SearchQuery): Observable<HttpEvent<any>> {
     if (searchQuery.query === 'all') {
@@ -97,19 +102,76 @@ export class APIService {
       });
   }
 
+  alredySearchOrder: boolean = false;
   public SearcOrder(searchQuery: SearchQuery, cb: (result: OrderSearchResult) => void) {
 
-    return this.requestServices.post(`${this.HostURL}order/admin/all`, searchQuery).subscribe(
+    this.appServices.registerOrder(cb);
+    if (!this.alredySearchOrder) {
+      this.alredySearchOrder = true;
+      this.UpdateOrderList(searchQuery);
+    }
+  }
+
+  public UpdateOrderList(searchQuery: SearchQuery) {
+    this.requestServices.post(`${this.HostURL}order/admin/all`, searchQuery).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log('order result: ');
-          console.log(event.body);
+          //console.log(event.body);
+          this.currentOrderResult = event.body;
+          this.appServices.changeOrder(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+      });
+  }
+
+  public RemoveOrder(id: string) {
+    if (this.currentOrderResult !== null) {
+      const removeID = this.currentOrderResult.result.findIndex(x => x.package_order_second_id === id);
+      console.log(removeID);
+
+      this.currentOrderResult.result.splice(removeID, 1);
+      this.appServices.changeOrder(this.currentOrderResult);
+    }
+  }
+
+  public GetOrderDetail(id: string, cb: (order: PackageOrder) => void) {
+    if (this.currentOrderResult !== null) {
+      let matchOrder = this.currentOrderResult.result.find(x => x.package_order_second_id === id);
+      if (matchOrder) {
+        cb(matchOrder);
+        return;
+      }
+    }
+    this.requestServices.get(`${this.HostURL}order/admin/detail/${id}`).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('order detail: ');
           cb(event.body);
         }
       },
       err => {
         console.log(err);
-        cb(null);
+      });
+  }
+
+  public CloseOrder(id: string, cb: (order: PackageOrder) => void) {
+    const closeorder: ObjectID = {
+      id: id
+    }
+    this.requestServices.post(`${this.HostURL}order/admin/done`, closeorder).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('close order: ');
+          console.log(event.body);
+
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
       });
   }
 }

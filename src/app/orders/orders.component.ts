@@ -26,14 +26,24 @@ export class OrdersComponent implements OnInit {
       if (result === null) {
 
       } else {
+        console.log(result);
+
         this.listProduct = result.result;
         this.dataSource.data = this.listProduct;
       }
     });
   }
 
-  deleteProduct(order: PackageOrder){
+  deletePackage(order: PackageOrder){
+    console.log(order);
 
+    this.api.CloseOrder(order.package_order_second_id, result=>{
+      this.api.RemoveOrder(order.package_order_second_id);
+    });
+  }
+
+  refresh(){
+    this.api.UpdateOrderList(new SearchQuery('ORDER', 0, this.maxSearResult, ''));
   }
 
 }

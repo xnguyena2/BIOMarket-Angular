@@ -30,6 +30,7 @@ import { ListNotificationComponent } from './list-notification/list-notification
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './Injectable/AuthInterceptor ';
 import { OrderdetailComponent } from './orderdetail/orderdetail.component';
+import { MoneyFormatPipe } from './pipe/money-format.pipe';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -55,7 +56,8 @@ const httpInterceptorProviders = [
     ListVoucherComponent,
     ListNotificationComponent,
     LoginComponent,
-    OrderdetailComponent
+    OrderdetailComponent,
+    MoneyFormatPipe
   ],
   imports: [
     BrowserModule,
@@ -80,6 +82,7 @@ const httpInterceptorProviders = [
       { path: 'orders', component: OrdersComponent },
       { path: 'setting', component: SettingComponent },
       { path: 'images', component: ImagesComponent },
+      { path: 'orderdetail/:orderid', component: OrderdetailComponent },
       {
         path: 'voucher', component: VoucherComponent, children: [
           {
