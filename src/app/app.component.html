@@ -19,3 +19,8 @@
 <section>
   <router-outlet></router-outlet>
 </section>
+
+<div class="alert-container">
+  <ngb-alert #selfClosingAlert *ngIf="showAlter" type="{{alertType}}" (closed)="!showAlter">{{ alertMessage }}
+  </ngb-alert>
+</div>

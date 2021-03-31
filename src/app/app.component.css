@@ -88,3 +88,9 @@ section{
   transition: all .5s ease;
   z-index: 1;
 }
+
+.alert-container{
+  position: fixed;
+  right: 20px;
+  top: 70px;
+}

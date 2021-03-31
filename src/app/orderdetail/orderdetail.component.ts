@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { cover, OrderItem, PackageOrder } from '../object/OrderSearchResult';
 import { APIService } from '../services/api.service';
+import { AppService } from '../services/app.service';
 
 @Component({
   selector: 'app-orderdetail',
@@ -35,7 +36,8 @@ export class OrderdetailComponent implements OnInit {
   totalPrice: number = 0;
 
   constructor(private route: ActivatedRoute,
-    private api: APIService) { }
+    private api: APIService,
+    private app: AppService) { }
 
   ngOnInit(): void {
     const orderID = this.route.snapshot.paramMap.get('orderid');
@@ -65,6 +67,7 @@ export class OrderdetailComponent implements OnInit {
   closeOrder(){
     this.api.CloseOrder(this.id, result=>{
       this.api.RemoveOrder(this.id);
+      this.app.changeNotification("Đóng đơn thành công!");
     });
   }
 }

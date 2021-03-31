@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { APIService } from '../services/api.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { APIService } from '../services/api.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private api: APIService) { }
+  constructor(private api: APIService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -18,7 +20,9 @@ export class LoginComponent implements OnInit {
       username: username,
       password: pw
     }, result =>{
-
+      if(result){
+        this.router.navigate(["/beers"]);
+      }
     })
   }
 
