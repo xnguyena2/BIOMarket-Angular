@@ -1,5 +1,5 @@
 export const AppConfig = {
-  BaseUrl : 'https://ancient-coast-10757.herokuapp.com/',//"http://localhost:5000/",
+  BaseUrl : 'http://biomarket.api.buffchalo.com/',//"http://localhost:5000/",
   FilterDrop: [{
     value: 'default',
     title: 'Nổi Bật'
