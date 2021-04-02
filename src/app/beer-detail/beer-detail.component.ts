@@ -64,6 +64,11 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       //should load beer detail
       this.api.GetProductDetail(this.beerID, result => {
         if (result) {
+          result.listUnit.forEach(beerUnit => {
+            if (beerUnit.dateExpir?.month > 0) {
+              beerUnit.dateExpir.month += 1;
+            }
+          });
           this.beerName = result.name;
           this.beerDetail = result.detail;
           this.beerCategory = result.category;
@@ -119,6 +124,9 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
     this.isDisableSubmitButton = true;
     this.listUnits.forEach((value, index) => {
       value.beer = this.beerID;
+      if (value.dateExpir?.month > 0) {
+        value.dateExpir.month -= 1;
+      }
     });
     let submitData: BeerDetail = {
       name: this.beerName,
