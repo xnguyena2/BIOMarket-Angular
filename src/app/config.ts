@@ -1,5 +1,7 @@
+import { isDevMode } from '@angular/core';
+
 export const AppConfig = {
-  BaseUrl : '/',//"http://localhost:5000/",
+  BaseUrl : isDevMode()?'/':'http://localhost:5000/',
   FilterDrop: [{
     value: 'default',
     title: 'Nổi Bật'
