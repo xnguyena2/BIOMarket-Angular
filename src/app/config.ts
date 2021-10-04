@@ -59,6 +59,10 @@ export const AppConfig = {
   {
     value: 'fish',
     title: 'Cá'
+  },
+  {
+    value: 'snail',
+    title: 'Ốc'
   }],
   GHN: {
     weigitExchange: 0.0002,
