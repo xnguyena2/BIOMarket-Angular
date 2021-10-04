@@ -1,5 +1,5 @@
 export const AppConfig = {
-  BaseUrl : 'http://biomarket.api.buffchalo.com/',//"http://localhost:5000/",
+  BaseUrl : '/',//"http://localhost:5000/",
   FilterDrop: [{
     value: 'default',
     title: 'Nổi Bật'
@@ -33,24 +33,32 @@ export const AppConfig = {
     title: 'Bán Chạy Nhất'
   }],
   CatetoryDrop: [{
-    value: 'alcohol_drinks',
-    title: 'Đồ Uống Có Cồn'
+    value: 'crab',
+    title: 'Cua'
   },
   {
-    value: 'beverage',
-    title: 'Nước Giải Khát'
+    value: 'shrimp',
+    title: 'Tôm'
   },
   {
-    value: 'fresh_water',
-    title: 'Nước Lọc'
+    value: 'squid',
+    title: 'Mực'
   },
   {
-    value: 'internationnal_drinks',
-    title: 'Đồ Uống Nhập Ngoại'
+    value: 'holothurian',
+    title: 'Hải Sâm'
   },
   {
-    value: 'juice_fruit',
-    title: 'Nước Ép Trái Cây'
+    value: 'haliotis',
+    title: 'Bào Ngư'
+  },
+  {
+    value: 'oyster',
+    title: 'Hàu'
+  },
+  {
+    value: 'fish',
+    title: 'Cá'
   }],
   GHN: {
     weigitExchange: 0.0002,

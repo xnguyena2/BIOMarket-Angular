@@ -12,15 +12,18 @@
           <textarea class="textarea" [(ngModel)]='beerDetail' required></textarea>
         </div>
         <div class="input-field">
-          <label>Loại Đồ Uống</label>
+          <label>Loại Hải Sản</label>
           <div class="category-select">
             <select [(ngModel)]='beerCategory' class="select">
+              <!-- <option *ngFor="let item of CatetoryDrop;" (value)="item.value">{{item.title}}</option> -->
               <option value="">--Chọn--</option>
-              <option value="alcohol_drinks">Đồ Uống Có Cồn</option>
-              <option value="beverage">Nước Giải Khát</option>
-              <option value="fresh_water">Nước Lọc</option>
-              <option value="internationnal_drinks">Đồ Uống Nhập Ngoại</option>
-              <option value="juice_fruit">Nước Ép Trái Cây</option>
+              <option value="crab">Cua</option>
+              <option value="shrimp">Tôm</option>
+              <option value="squid">Mực</option>
+              <option value="holothurian">Hải Sâm</option>
+              <option value="haliotis">Bào Ngư</option>
+              <option value="oyster">Hàu</option>
+              <option value="fish">Cá</option>
             </select>
           </div>
         </div>
