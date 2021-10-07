@@ -194,7 +194,7 @@ export class APIService {
           console.log(err);
         });
 
-    }, 1000 * 15); //Do this after 1 hour
+    }, 1000 * 60 * AppConfig.TimeRefresh); //Do this after 1 hour
   }
 
   //generate productID

@@ -39,14 +39,14 @@ export class UploadImageComponent implements OnInit {
     this.prepareFilesList($event);
   }
 
-  deleteFile(index: number) {
-
-    let file = this.files[index];
-    this.uploadService.deleteFile(this.path + '/delete', file.imgid).subscribe(
+  deleteFile(imgID: string) {
+    this.uploadService.deleteFile(this.path + '/delete', imgID).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
         } else if (event instanceof HttpResponse) {
           console.log(event.body);
+
+          let index: number = this.files.findIndex(d => d.imgid === imgID);
           this.files.splice(index, 1);
         }
       },

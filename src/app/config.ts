@@ -1,6 +1,7 @@
 
 export const AppConfig = {
   BaseUrl : '/',//:'http://localhost:5000/',
+  TimeRefresh: 10,//mins
   FilterDrop: [{
     value: 'default',
     title: 'Nổi Bật'
