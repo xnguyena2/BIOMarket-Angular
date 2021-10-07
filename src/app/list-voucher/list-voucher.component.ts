@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { RequestService } from '../services/request.service';
-
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { AppConfig } from '../config';
-import { HttpResponse } from '@angular/common/http';
+import { APIService } from '../services/api.service';
 
 export interface VoucherBasicInfo {
   id: string;
@@ -33,24 +30,12 @@ export class ListVoucherComponent implements OnInit {
   faPlus = faPlus
 
   constructor(
-    private requestServices: RequestService) { }
+    private api: APIService) { }
 
   ngOnInit(): void {
-    this.requestServices.post(AppConfig.BaseUrl + 'voucher/getall', {
-      page: 0,
-      size: 100
-    }).subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          this.loadData(event.body);
-        }
-      },
-      err => {
-        console.log('Could not get all Voucher!');
-        console.log(err);
-
-      });
+    this.api.GetVoucher(vouchers=>{
+      this.loadData(vouchers);
+    });
   }
 
   loadData(response: any) {

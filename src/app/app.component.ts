@@ -8,7 +8,6 @@ import { faImages } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { faGift } from '@fortawesome/free-solid-svg-icons';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs';
 import { AppService } from './services/app.service';
 
 @Component({
@@ -33,7 +32,6 @@ export class AppComponent implements OnInit {
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert: NgbAlert;
 
   constructor(private app: AppService) {
-
   }
 
   ngOnInit(): void {

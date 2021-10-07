@@ -9,7 +9,7 @@ import { OrderSearchResult } from '../object/OrderSearchResult';
 export class AppService {
 
   readonly IGNORE: OrderSearchResult = null;
-  readonly IGNORESTR: string = '';;
+  readonly IGNORESTR: string = '';
 
   private orderSource = new BehaviorSubject<OrderSearchResult>(this.IGNORE);
   private order = this.orderSource.asObservable();

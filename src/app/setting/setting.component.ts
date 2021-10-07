@@ -1,13 +1,11 @@
 import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
 
 import { UploadImageComponent } from '../upload-image/upload-image.component';
-
-import { RequestService } from '../services/request.service';
 
 import { AppConfig } from '../config';
 
 import { AppService } from '../services/app.service';
+import { APIService } from '../services/api.service';
 
 export interface DeviceConfigData {
   color: string
@@ -56,42 +54,27 @@ export class SettingComponent implements AfterViewInit, OnInit {
   carouselPath = 'carousel/admin'
 
   constructor(
-    private requestServices: RequestService,
+    private api: APIService,
     private app: AppService) { }
 
   ngAfterViewInit(): void {
     this.imageManager.setPath(this.carouselPath);
     this.imageManager.loadAllImage();
-    this.requestServices.get(AppConfig.BaseUrl+'deviceconfig/get').subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          if (event.body != undefined) {
-            this.deviceColor = event.body.color;
-          }
-        }
-      },
-      err => {
-        console.log('Could not get device config!');
-        console.log(err);
-        this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
-      });
-    this.requestServices.get(AppConfig.BaseUrl+'shippingprovider/admin/get/'+this.providerID).subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          if(event.body != undefined && event.body.config != undefined){
-            this.ghn = JSON.parse(event.body.config);
-          }else{
-            this.ghn = AppConfig.GHN;
-          }
-        }
-      },
-      err => {
-        console.log('Could not get ship provider!');
-        console.log(err);
-        this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
-      });
+    this.api.GetDeviceConfig(deviceConfig=>{
+      this.deviceColor = deviceConfig.color;
+    }, ()=>{
+      this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
+    });
+
+    this.api.GetShippingProvider(this.providerID, response=>{
+      if(response != undefined && response.config != undefined){
+        this.ghn = JSON.parse(response);
+      }else{
+        this.ghn = AppConfig.GHN;
+      }
+    }, ()=>{
+      this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
+    });
   }
 
   ngOnInit() {
@@ -100,21 +83,13 @@ export class SettingComponent implements AfterViewInit, OnInit {
 
   saveDeviceColor(): void {
     console.log(this.deviceColor);
-    this.requestServices.post(AppConfig.BaseUrl+'deviceconfig/admin/changecolor',
-    {
+    this.api.SaveDeviceColor({
       color: this.deviceColor
-    }).subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          this.app.changeNotification('Lưu màu thành công!!!');
-        }
-      },
-      err => {
-        console.log('Could not save color!');
-        console.log(err);
-        this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
-      });
+    }, ()=>{
+      this.app.changeNotification('Lưu màu thành công!!!');
+    }, ()=>{
+      this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
+    });
   }
 
   saveShipProvider():void{
@@ -122,19 +97,11 @@ export class SettingComponent implements AfterViewInit, OnInit {
       id : this.providerID,
       json: JSON.stringify(this.ghn)
     }
-    this.requestServices.post(AppConfig.BaseUrl+'shippingprovider/admin/update', submitData)
-    .subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          this.app.changeNotification('Lưu shipping-provider thành công!!!');
-        }
-      },
-      err => {
-        console.log('Could not save shipping provider!');
-        console.log(err);
-        this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
-      });
+    this.api.SaveShipProvider(submitData, ()=>{
+      this.app.changeNotification('Lưu shipping-provider thành công!!!');
+    }, ()=>{
+      this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
+    });
   }
 
 }

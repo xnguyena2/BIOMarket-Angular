@@ -3,7 +3,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UploadFileService } from 'src/app/services/upload-file.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { AppConfig } from '../config'
 import { Image } from '../object/BeerDetail';
 
 @Component({

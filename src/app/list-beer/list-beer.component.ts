@@ -31,6 +31,7 @@ export class ListBeerComponent implements OnInit {
     this.api.SearchBeer(new SearchQuery('all', 0, this.maxSearResult, ''), result => {
       this.listProduct = result.result;
       this.dataSource.data = this.listProduct;
+      this.api.RefreshToken();
     });
   }
 

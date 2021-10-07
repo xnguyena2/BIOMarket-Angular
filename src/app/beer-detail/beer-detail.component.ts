@@ -6,11 +6,6 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { UploadImageComponent } from '../upload-image/upload-image.component';
 import { RequestService } from '../services/request.service';
 
-import { AppConfig } from '../config';
-
-import { HttpResponse } from '@angular/common/http';
-
-
 import { APIService } from '../services/api.service';
 import { BeerDetail, BeerUnit } from '../object/BeerDetail';
 import { AppService } from '../services/app.service';
@@ -72,19 +67,10 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
         }
       });
     } else {
-      this.requestServices.get(AppConfig.BaseUrl + 'beer/admin/generateid').subscribe(
-        event => {
-          if (event instanceof HttpResponse) {
-            console.log(event.body);
-            this.beerID = event.body.response;
-            this.isDisableSubmitButton = false;
-          }
-        },
-        err => {
-          console.log('Could not generate beer ID!');
-          console.log(err);
-
-        });
+      this.api.GenerateProductID(beerID => {
+        this.beerID = beerID;
+        this.isDisableSubmitButton = false;
+      });
     }
   }
 
@@ -132,26 +118,18 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
 
     console.log(submitData);
 
-    this.requestServices.post(AppConfig.BaseUrl + 'beer/admin/create', submitData).subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          for (let beerUnit of event.body) {
-            let beerU: BeerUnit = this.listUnits.find(bu => bu.name === beerUnit.name);
-            if (beerU != undefined) {
-              beerU.beer_unit_second_id = beerUnit.beer_unit_second_id;
-            }
-          }
-          this.isDisableSubmitButton = false;
-          this.app.changeNotification('Lưu sản phẩm thành công!!!');
+    this.api.CreateOrUpdateProduct(submitData, listUnits => {
+      for (let beerUnit of listUnits) {
+        let beerU: BeerUnit = this.listUnits.find(bu => bu.name === beerUnit.name);
+        if (beerU != undefined) {
+          beerU.beer_unit_second_id = beerUnit.beer_unit_second_id;
         }
-      },
-      err => {
-        console.log('Could not save beer!');
-        console.log(err);
-        this.isDisableSubmitButton = false;
-        this.app.changeNotification('Error: Không thể lưu sản phẩm!!!');
-      });
-
+      }
+      this.isDisableSubmitButton = false;
+      this.app.changeNotification('Lưu sản phẩm thành công!!!');
+    }, () => {
+      this.isDisableSubmitButton = false;
+      this.app.changeNotification('Error: Không thể lưu sản phẩm!!!');
+    });
   }
 }

@@ -174,4 +174,140 @@ export class APIService {
         console.log(err);
       });
   }
+
+  //refresh admin token
+  private refreshToken: boolean = false;
+  public RefreshToken() {
+    if (this.refreshToken)
+      return;
+    this.refreshToken = true;
+
+    setInterval(() => {
+      console.log('refresh token!');
+
+      this.requestServices.post(`${this.HostURL}auth/refresh`, null).subscribe(
+        event => {
+          if (event instanceof HttpResponse) {
+          }
+        },
+        err => {
+          console.log(err);
+        });
+
+    }, 1000 * 15); //Do this after 1 hour
+  }
+
+  //generate productID
+  public GenerateProductID(cb: (string) => void) {
+    this.requestServices.get(AppConfig.BaseUrl + 'beer/admin/generateid').subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb(event.body.response);
+        }
+      },
+      err => {
+        console.log('Could not generate beer ID!');
+        console.log(err);
+
+      });
+  }
+
+  //create product
+  public CreateOrUpdateProduct(submitData: BeerDetail, done: (any) => void, error: () => void) {
+
+    this.requestServices.post(AppConfig.BaseUrl + 'beer/admin/create', submitData).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          done(event.body);
+        }
+      },
+      err => {
+        console.log('Could not save beer!');
+        console.log(err);
+        error();
+      });
+  }
+
+  public GetVoucher(cb: (vouchers) => void) {
+    this.requestServices.post(AppConfig.BaseUrl + 'voucher/getall', {
+      page: 0,
+      size: 100
+    }).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log('Could not get all Voucher!');
+        console.log(err);
+
+      });
+  }
+
+  public GetDeviceConfig(cb: (deviceConfig) => void, error: () => void) {
+    this.requestServices.get(AppConfig.BaseUrl + 'deviceconfig/get').subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log('Could not get device config!');
+        console.log(err);
+        error();
+      });
+
+  }
+
+  public SaveDeviceColor(colorConfig: any, cb: () => void, error: () => void) {
+    this.requestServices.post(AppConfig.BaseUrl + 'deviceconfig/admin/changecolor', colorConfig).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb();
+        }
+      },
+      err => {
+        console.log('Could not save color!');
+        console.log(err);
+        error();
+      });
+  }
+
+  public GetShippingProvider(providerID: string, cb: (any) => void, error: () => void) {
+
+    this.requestServices.get(AppConfig.BaseUrl + 'shippingprovider/admin/get/' + providerID).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log('Could not get ship provider!');
+        console.log(err);
+        error();
+      });
+  }
+
+  public SaveShipProvider(submitData: any, cb: ()=>void, error: ()=>void){
+    this.requestServices.post(AppConfig.BaseUrl+'shippingprovider/admin/update', submitData)
+    .subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb();
+        }
+      },
+      err => {
+        console.log('Could not save shipping provider!');
+        console.log(err);
+        error();
+      });
+  }
 }
