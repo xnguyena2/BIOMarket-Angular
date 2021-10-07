@@ -27,9 +27,9 @@ export interface ShippingProvider {
   listPackagePriceDetail: PackagePrice[];
 }
 
-interface ShippingProviderData{
-  id:string;
-  json:string;
+interface ShippingProviderData {
+  id: string;
+  json: string;
 }
 
 @Component({
@@ -39,8 +39,8 @@ interface ShippingProviderData{
 })
 export class SettingComponent implements AfterViewInit, OnInit {
 
-  alertMessage:string;
-  alertType:string;
+  alertMessage: string;
+  alertType: string;
 
 
   readonly providerID = "GHN";
@@ -60,19 +60,20 @@ export class SettingComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.imageManager.setPath(this.carouselPath);
     this.imageManager.loadAllImage();
-    this.api.GetDeviceConfig(deviceConfig=>{
-      this.deviceColor = deviceConfig.color;
-    }, ()=>{
+    this.api.GetDeviceConfig(deviceConfig => {
+      if (deviceConfig != undefined)
+        this.deviceColor = deviceConfig.color;
+    }, () => {
       this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
     });
 
-    this.api.GetShippingProvider(this.providerID, response=>{
-      if(response != undefined && response.config != undefined){
-        this.ghn = JSON.parse(response);
-      }else{
+    this.api.GetShippingProvider(this.providerID, response => {
+      if (response != undefined && response.config != undefined) {
+        this.ghn = JSON.parse(response.config);
+      } else {
         this.ghn = AppConfig.GHN;
       }
-    }, ()=>{
+    }, () => {
       this.app.changeNotification('Error: Không thể kết nối máy chủ!!!');
     });
   }
@@ -85,21 +86,21 @@ export class SettingComponent implements AfterViewInit, OnInit {
     console.log(this.deviceColor);
     this.api.SaveDeviceColor({
       color: this.deviceColor
-    }, ()=>{
+    }, () => {
       this.app.changeNotification('Lưu màu thành công!!!');
-    }, ()=>{
+    }, () => {
       this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
     });
   }
 
-  saveShipProvider():void{
-    let submitData:ShippingProviderData = {
-      id : this.providerID,
+  saveShipProvider(): void {
+    let submitData: ShippingProviderData = {
+      id: this.providerID,
       json: JSON.stringify(this.ghn)
     }
-    this.api.SaveShipProvider(submitData, ()=>{
+    this.api.SaveShipProvider(submitData, () => {
       this.app.changeNotification('Lưu shipping-provider thành công!!!');
-    }, ()=>{
+    }, () => {
       this.app.changeNotification('Error: Không thể lưu cài đặt!!!');
     });
   }
