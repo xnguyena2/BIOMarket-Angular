@@ -50,9 +50,6 @@
   font-size: 17px;
   display: inline-block;
 }
-.total-container .pair-info span{
-
-}
 .total-container .pair-info.no-bottom-border{
   border-bottom: none;
 }
