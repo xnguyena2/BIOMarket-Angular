@@ -24,6 +24,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   beerName: string;
   beerDetail: string;
   beerCategory: any;
+  beerStatus: any;
 
   listUnits: BeerUnit[] = [];
 
@@ -62,6 +63,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
           this.beerName = result.name;
           this.beerDetail = result.detail;
           this.beerCategory = result.category;
+          this.beerStatus = result.status;
           this.listUnits = result.listUnit;
           this.isDisableSubmitButton = false;
         }
@@ -111,6 +113,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       beerSecondID: this.beerID,
       detail: this.beerDetail,
       category: this.beerCategory,
+      status: this.beerStatus,
       listUnit: this.listUnits,
       images: []
     }

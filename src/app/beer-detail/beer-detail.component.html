@@ -28,6 +28,19 @@
             </select>
           </div>
         </div>
+        <div class="input-field">
+          <label>Trạng Thái</label>
+          <div class="category-select">
+            <select [(ngModel)]='beerStatus' class="select">
+              <!-- <option *ngFor="let item of CatetoryDrop;" (value)="item.value">{{item.title}}</option> -->
+              <option value="">--Chọn--</option>
+              <option value="avariable">Đang Bán</option>
+              <option value="not_for_sell">Có Thể Đặt Hàng</option>
+              <option value="sold_out">Hết Hàng</option>
+              <option value="hide">Ẩn</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="sub-input">
         <div *ngFor="let unit of listUnits; let i = index;">
