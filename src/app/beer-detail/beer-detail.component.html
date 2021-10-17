@@ -78,6 +78,18 @@
               <input type="text" class="input" [(ngModel)]='unit.weight'>
             </div>
             <div class="input-field">
+              <label>Trạng Thái</label>
+              <div class="category-select">
+                <select [(ngModel)]='unit.status' class="select">
+                  <!-- <option *ngFor="let item of CatetoryDrop;" (value)="item.value">{{item.title}}</option> -->
+                  <option value="">--Chọn--</option>
+                  <option value="avariable">Đang Bán</option>
+                  <option value="not_for_sell">Có Thể Đặt Hàng</option>
+                  <option value="sold_out">Hết Hàng</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-field">
               <fa-icon [icon]="faTrash" class="sub-beer-type" (click)='removeUnit(i)' *ngIf='listUnits.length>1'></fa-icon>
             </div>
           </div>

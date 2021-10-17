@@ -89,7 +89,8 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
       weight: 0,
       volumetric: 0,
       dateExpir: null,
-      beer_unit_second_id: null
+      beer_unit_second_id: null,
+      status: null
     };
   }
 
