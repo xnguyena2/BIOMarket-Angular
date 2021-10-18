@@ -7,6 +7,7 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons';
 import { faImages } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { faGift } from '@fortawesome/free-solid-svg-icons';
+import { faTasks } from '@fortawesome/free-solid-svg-icons';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from './services/app.service';
 
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
   faImages = faImages;
   faBell = faBell;
   faGift = faGift;
+  faTasks = faTasks;
 
   alertType: string;
   alertMessage: string = '';

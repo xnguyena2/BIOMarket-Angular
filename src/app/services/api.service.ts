@@ -1,6 +1,6 @@
 import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserInfo } from '../object/AdminLogin';
+import { UserDetail, UserInfo } from '../object/AdminLogin';
 import { Observable } from 'rxjs';
 import { AppConfig, removeVietnameseTones } from '../config';
 import { BeerDetail } from '../object/BeerDetail';
@@ -42,6 +42,21 @@ export class APIService {
       err => {
         console.log(err);
         cb(false);
+      });
+  }
+
+  public AdminGetDetail(cb: (result: UserDetail) => void) {
+
+    return this.requestServices.get(`${this.HostURL}auth/me`).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('Detail result: ');
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
       });
   }
 

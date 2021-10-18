@@ -1,0 +1,47 @@
+.user-info-container{
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 50rem;
+  min-width: max-content;
+  background-color: rgba(233, 231, 231, 0.308);
+  border-radius: 0.5rem;
+  border: 1px solid rgb(153, 153, 153);
+}
+
+.title{
+  text-align: center;
+  position: relative;
+  width: max-content;
+  margin: 0 auto;
+}
+.title::after{
+  content: '';
+  position: absolute;
+  width: calc(100% - 10px);
+  height: 1px;
+  bottom: -3px;
+  left: 5px;
+  background-color: gray;
+}
+
+.main-info{
+  font-style: bold;
+  font-size: 1.1em;
+}
+
+input{
+  margin-left: 10px;
+}
+
+a{
+  margin-left: 5px;
+  text-decoration: none;
+  padding: 10px;
+  color: white;
+  background-color: #009879;
+  font-size: 15px;
+}
+
+.delete{
+  background-color: red;
+}
