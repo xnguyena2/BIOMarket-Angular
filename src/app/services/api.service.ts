@@ -1,6 +1,6 @@
 import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserDetail, UserInfo } from '../object/AdminLogin';
+import { UserDetail, UserEntity, UserInfo } from '../object/AdminLogin';
 import { Observable } from 'rxjs';
 import { AppConfig, removeVietnameseTones } from '../config';
 import { BeerDetail } from '../object/BeerDetail';
@@ -12,6 +12,7 @@ import { Md5 } from 'ts-md5/dist/md5';
 import { OrderSearchResult, PackageOrder } from '../object/OrderSearchResult';
 import { AppService } from './app.service';
 import { ObjectID } from '../object/ObjectID';
+import { UpdatePassword } from '../object/UpdatePassword';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,18 @@ export class APIService {
     private requestServices: RequestService,
     private appServices: AppService) { }
 
+    formaPass(us: UpdatePassword){
+
+      if(us.oldpassword && us.oldpassword != ''){
+        us.oldpassword = new Md5().appendStr(us.oldpassword).end().toString().toUpperCase();
+      }
+
+      if(us.newpassword && us.newpassword != ''){
+        us.newpassword = new Md5().appendStr(us.newpassword).end().toString().toUpperCase();
+      }
+
+    }
+
   public AdminLogin(user: UserInfo, cb: (result: boolean) => void) {
     const md5 = new Md5();
     let password = md5.appendStr(user.password).end().toString().toUpperCase();
@@ -35,6 +48,22 @@ export class APIService {
       event => {
         if (event instanceof HttpResponse) {
           console.log('login result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
+  public Logout(cb: (success: boolean) => void) {
+
+    return this.requestServices.post(`${this.HostURL}auth/account/logout`, null).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('Logout user result: ');
           console.log(event.body);
           cb(true);
         }
@@ -60,6 +89,73 @@ export class APIService {
       });
   }
 
+  public AdminGetAllUser(searchQuery: SearchQuery, cb: (result: SearchResult<UserEntity>) => void) {
+
+    return this.requestServices.post(`${this.HostURL}account/admin/getall`, searchQuery).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('all user result: ');
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+      });
+  }
+
+  public AdminUpdatePassUser(newUser: UpdatePassword, cb: (success: boolean) => void) {
+
+    this.formaPass(newUser);
+    return this.requestServices.post(`${this.HostURL}auth/account/update`, newUser).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('Update user result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
+  public AdminCreateUser(newUser: UpdatePassword, cb: (success: boolean) => void) {
+
+    this.formaPass(newUser);
+    return this.requestServices.post(`${this.HostURL}auth/admin/account/create`, newUser).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('create user result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
+  public AdminDeleteUser(newUser: UpdatePassword, cb: (success: boolean) => void, isSelfDelete: boolean) {
+
+    this.formaPass(newUser);
+    let path = isSelfDelete ? `${this.HostURL}auth/account/delete` : `${this.HostURL}auth/admin/account/delete`;
+    return this.requestServices.post(path, newUser).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('delete user result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
   private search(searchQuery: SearchQuery): Observable<HttpEvent<any>> {
     if (searchQuery.query === 'all') {
       return this.requestServices.post(`${this.HostURL}beer/admin/getall`, searchQuery)
@@ -72,7 +168,7 @@ export class APIService {
     }
   }
 
-  public SearchBeer(searchQuery: SearchQuery, cb: (result: SearchResult) => void) {
+  public SearchBeer(searchQuery: SearchQuery, cb: (result: SearchResult<BeerDetail>) => void) {
     this.search(searchQuery).subscribe(
       event => {
         if (event instanceof HttpResponse) {
@@ -310,19 +406,19 @@ export class APIService {
       });
   }
 
-  public SaveShipProvider(submitData: any, cb: ()=>void, error: ()=>void){
-    this.requestServices.post(AppConfig.BaseUrl+'shippingprovider/admin/update', submitData)
-    .subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          cb();
-        }
-      },
-      err => {
-        console.log('Could not save shipping provider!');
-        console.log(err);
-        error();
-      });
+  public SaveShipProvider(submitData: any, cb: () => void, error: () => void) {
+    this.requestServices.post(AppConfig.BaseUrl + 'shippingprovider/admin/update', submitData)
+      .subscribe(
+        event => {
+          if (event instanceof HttpResponse) {
+            console.log(event.body);
+            cb();
+          }
+        },
+        err => {
+          console.log('Could not save shipping provider!');
+          console.log(err);
+          error();
+        });
   }
 }

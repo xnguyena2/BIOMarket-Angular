@@ -6,17 +6,96 @@
       <p>Role: <span class="main-info">{{role}}</span></p>
       <form class="update-info">
         <label for="">Đổi Pass:</label>
-        <input type="password" name="" id="" class="text-input" placeholder="old pass">
-        <input type="password" name="" id="" class="text-input" placeholder="new pass">
-        <input type="password" name="" id="" class="text-input" placeholder="confirm new pass">
-        <a href="">Update</a>
+        <input type="password" name="updateOldPass" class="text-input" placeholder="old pass" [(ngModel)]='updateOldPass'>
+        <input type="password" name="updateNewPass" class="text-input" placeholder="new pass" [(ngModel)]='updateNewPass'>
+        <input type="password" name="updateNewPassConfirm" class="text-input" placeholder="confirm new pass" [(ngModel)]='updateNewPassConfirm'>
+        <a class="gravity-right update-btn" (click)='updatePassword()'>Update</a>
       </form>
       <form class="update-info">
         <label for="">Xóa Tài Khoản:</label>
-        <input type="password" name="" id="" class="text-input" placeholder="pass">
-        <input type="password" name="" id="" class="text-input" placeholder="confirm pass">
-        <a href="" class="delete">Delete</a>
+        <input type="password" name="deleteOldPass" class="text-input" placeholder="pass" [(ngModel)]='deleteOldPass'>
+        <input type="password" name="deleteOldPassConfirm" class="text-input" placeholder="confirm pass" [(ngModel)]='deleteOldPassConfirm'>
+        <a class="update-btn gravity-right delete" (click)='selfDelete()'>Delete</a>
       </form>
+      <a class="update-btn log-out delete" (click)='logOut()'>LogOut</a>
+    </div>
+    <div class="user-info-container full-parent" *ngIf="isAdmin">
+      <h4 class="title">Quản Lý Người Dùng</h4>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 content-table">
+
+        <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="UserName">
+          <th mat-header-cell *matHeaderCellDef class="table-header-col"> UserName</th>
+          <td mat-cell *matCellDef="let element"> <a>{{element.username}}</a> </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="Role">
+          <th mat-header-cell *matHeaderCellDef class="table-header-col"> Role </th>
+          <td mat-cell *matCellDef="let element"> {{element.roles}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="CreatedBy">
+          <th mat-header-cell *matHeaderCellDef class="table-header-col"> Created By </th>
+          <td mat-cell *matCellDef="let element"> {{element.createby}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="CreatedTime">
+          <th mat-header-cell *matHeaderCellDef class="table-header-col"> Created Time </th>
+          <td mat-cell *matCellDef="let element"> {{element.createat}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef class="table-header-col"> Delete </th>
+          <td mat-cell *matCellDef="let element">
+            <fa-icon [icon]="faTrash" class="cursor-btn" (click)="deleteUser(element.username, '', false)"></fa-icon>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="add">
+          <th mat-header-cell *matHeaderCellDef class="table-header-col"><a (click)='showAddAccount(true)'><fa-icon [icon]="faPlus" class="add-btn"></fa-icon></a></th>
+          <td mat-cell *matCellDef="let element"></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-rows"></tr>
+      </table>
+
     </div>
   </div>
+</div>
+<div class="crate-account" *ngIf="addNewAccountPopup" (click)='showAddAccount(false)'>
+  <form action="" class="update-info absolut-center crate-account-form" (click)='$event.stopPropagation();'>
+    <div class="input-field">
+      <label for="">Tên Tài Khoản:</label>
+      <input type="text" name="newuserName" class="text-input" placeholder="username" [(ngModel)]='newuserName'>
+    </div>
+    <div class="input-field">
+      <label for="">Password:</label>
+      <input type="password" name="newPassword" class="text-input" placeholder="password" [(ngModel)]='newPassword'>
+    </div>
+    <div class="input-field">
+      <label for="">Confirm Password:</label>
+      <input type="password" name="newConfirmPassword" class="text-input" placeholder="confirm password" [(ngModel)]='newConfirmPassword'>
+    </div>
+    <div class="input-field">
+      <label for="">Role:</label>
+      <select [(ngModel)]='newAccountRole' name="newAccountRole" class="select">
+        <!-- <option *ngFor="let item of CatetoryDrop;" (value)="item.value">{{item.title}}</option> -->
+        <option value="">--Chọn--</option>
+        <option value="ROLE_ADMIN">Admin</option>
+        <option value="ROLE_USER">User</option>
+      </select>
+    </div>
+    <div class="input-field">
+      <a class="update-btn create-btn" (click)='createNewAccount()'>Create</a>
+    </div>
+  </form>
 </div>

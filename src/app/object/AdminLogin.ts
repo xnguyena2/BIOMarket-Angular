@@ -5,6 +5,13 @@ export interface UserInfo {
   password: string;
 }
 
+export interface UserEntity{
+  createat: string;
+  createby: string;
+  roles: string[];
+  username: string;
+}
+
 export class UserDetail {
   name: string;
   roles: string[];

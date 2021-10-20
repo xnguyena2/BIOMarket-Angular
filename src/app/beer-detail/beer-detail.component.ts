@@ -42,7 +42,6 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   beerID: string;
 
   constructor(private route: ActivatedRoute,
-    private requestServices: RequestService,
     private app: AppService,
     private api: APIService) { }
 
