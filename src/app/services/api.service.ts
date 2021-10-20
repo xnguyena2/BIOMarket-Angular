@@ -13,6 +13,7 @@ import { OrderSearchResult, PackageOrder } from '../object/OrderSearchResult';
 import { AppService } from './app.service';
 import { ObjectID } from '../object/ObjectID';
 import { UpdatePassword } from '../object/UpdatePassword';
+import { Buyer } from '../object/Buyer';
 
 @Injectable({
   providedIn: 'root'
@@ -153,6 +154,21 @@ export class APIService {
       err => {
         console.log(err);
         cb(false);
+      });
+  }
+
+  public AdminGetAllBuyer(searchQuery: SearchQuery, cb:(result: Buyer[] | null)=>void){
+    return this.requestServices.post(`${this.HostURL}buyer/admin/getall`, searchQuery).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('get all buyer result: ');
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(null);
       });
   }
 
