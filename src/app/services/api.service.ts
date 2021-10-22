@@ -52,8 +52,9 @@ export class APIService {
       console.log(newOrder);
     }, err => {
       console.log(err);
-      setInterval(() => {
-        this.appServices.changeNotification('Lost connect to server, please refresh page!!!!!');
+      this.appServices.changeNotification('Lost connect to server, please refresh page!!!!!');
+      setTimeout(() => {
+        this.Stream();
       }, 3000);
     });
   }
