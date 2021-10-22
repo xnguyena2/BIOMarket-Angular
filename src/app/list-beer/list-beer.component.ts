@@ -28,11 +28,13 @@ export class ListBeerComponent implements OnInit {
   constructor(private api: APIService) { }
 
   ngOnInit(): void {
-    this.api.SearchBeer(new SearchQuery('all', 0, this.maxSearResult, ''), result => {
+    this.api.SearchBeer(new SearchQuery('all', 0, this.maxSearResult, ''), (success, result) => {
       this.listProduct = result.result;
       this.dataSource.data = this.listProduct;
       this.api.RefreshToken();
-      this.api.Stream();
+      if (success) {
+        this.api.Stream();
+      }
     });
   }
 

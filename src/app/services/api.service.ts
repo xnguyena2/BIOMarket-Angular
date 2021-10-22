@@ -203,18 +203,18 @@ export class APIService {
     }
   }
 
-  public SearchBeer(searchQuery: SearchQuery, cb: (result: SearchResult<BeerDetail>) => void) {
+  public SearchBeer(searchQuery: SearchQuery, cb: (success: boolean, result: SearchResult<BeerDetail>) => void) {
     this.search(searchQuery).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log('search result: ');
           console.log(event.body);
-          cb(event.body);
+          cb(true, event.body);
         }
       },
       err => {
         console.log(err);
-        cb(new SearchResult());
+        cb(false, new SearchResult());
       });
   }
 
