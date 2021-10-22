@@ -43,7 +43,6 @@ export class AppComponent implements OnInit {
 
   constructor(private app: AppService,
     private router: Router,
-    private api: APIService,
     private titleService: Title) {
   }
 
@@ -71,8 +70,6 @@ export class AppComponent implements OnInit {
       var audio = new Audio('/assets/popding.mp3');
       audio.play();
     });
-
-    this.api.Stream();
   }
 
   showNewOrder(){

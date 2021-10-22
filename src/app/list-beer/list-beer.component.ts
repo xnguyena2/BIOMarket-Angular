@@ -32,6 +32,7 @@ export class ListBeerComponent implements OnInit {
       this.listProduct = result.result;
       this.dataSource.data = this.listProduct;
       this.api.RefreshToken();
+      this.api.Stream();
     });
   }
 

@@ -51,6 +51,7 @@ export class APIService {
       this.appServices.haveNewOrderer('(Đơn Hàng Mới!!!!)');
       console.log(newOrder);
     }, err => {
+      console.log(err);
       setInterval(() => {
         this.appServices.changeNotification('Lost connect to server, please refresh page!!!!!');
       }, 3000);

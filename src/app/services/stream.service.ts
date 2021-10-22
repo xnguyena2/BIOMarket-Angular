@@ -14,11 +14,20 @@ export class StreamService {
       let eventSource = new EventSource(url);
 
       eventSource.addEventListener('message', (event) => {
+        console.log('addEventListener');
         console.log(event);
         this._zone.run(() => {
           observer.next(JSON.parse(event.data));
         });
       });
+
+      eventSource.onmessage = (event) => {
+        console.log('onmessage');
+        console.log(event);
+        this._zone.run(() => {
+          observer.next(JSON.parse(event.data));
+        });
+      };
 
       eventSource.onerror = (error) => {
         // readyState === 0 (closed) means the remote source closed the connection,
