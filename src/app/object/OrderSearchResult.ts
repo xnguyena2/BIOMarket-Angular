@@ -33,6 +33,7 @@ export interface PackageOrder {
   reciver_fullname: string;
   phone_number: string;
   total_price: number;
+  real_price: number;
   ship_price: number;
   status: string;
 

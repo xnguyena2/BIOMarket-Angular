@@ -95,3 +95,16 @@ section{
   top: 70px;
   z-index: 9999;
 }
+
+.neworder{
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  padding: 8px;
+  border-radius: 2px;
+  text-decoration: none;
+  background-color: red;
+  box-shadow: 1px 1px 10px gray;
+  color: white;
+}

@@ -1,29 +1,41 @@
-<div *ngIf="showConfigView()">
+<div>
   <div class="form-container">
     <div class="input-container">
       <div class="sub-input">
         <div class="input-field">
           <label>Mã Voucher:</label>
-          <input type="text" class="input" [(ngModel)]='voucherName' required>
+          <input type="text" class="input" [(ngModel)]='voucherDetail.voucher_second_id' required [disabled]='isDisableID'>
         </div>
         <div class="input-field">
           <label>Thông Tin Chi Tiết:</label>
-          <textarea class="textarea" [(ngModel)]='voucherDetail' required></textarea>
+          <textarea class="textarea" [(ngModel)]='voucherDetail.detail' required></textarea>
         </div>
         <div class="input-field">
           <label>Tiền Giảm:</label>
-          <input type="number" class="input" [(ngModel)]='voucherAmount' required>
+          <input type="number" class="input" [(ngModel)]='voucherDetail.amount' required>
         </div>
         <div class="input-field">
           <label>Discount(%):</label>
-          <input type="number" class="input" [(ngModel)]='voucherDiscount' required>
+          <input type="number" class="input" [(ngModel)]='voucherDetail.discount' required>
+        </div>
+        <div class="input-field">
+          <label>Lần Sử Dụng(-1 không giới hạn):</label>
+          <input type="number" class="input" [(ngModel)]='voucherDetail.reuse' required>
+        </div>
+        <div class="input-field">
+          <label>Tất cả sản phẩm:</label>
+          <input type="checkbox" class="input checkbox" [(ngModel)]='voucherDetail.for_all_beer' required>
+        </div>
+        <div class="input-field">
+          <label>Tất cả người mua:</label>
+          <input type="checkbox" class="input checkbox" [(ngModel)]='voucherDetail.for_all_user' required>
         </div>
         <div class="input-field">
           <label>Hạn Giảm Giá:</label>
           <div class="form-group">
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd"
-                     name="dp" [(ngModel)]="dateExpir" ngbDatepicker #d="ngbDatepicker">
+                     name="dp" [(ngModel)]="voucherDetail.dateExpir" ngbDatepicker #d="ngbDatepicker">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
               </div>
@@ -31,7 +43,7 @@
           </div>
         </div>
         <div class="input-field">
-          <input type="submit" class="submit-btn" (click)='submitVoucher()'>
+          <input type="submit" class="submit-btn" [disabled]='isDisableSubmitButton' (click)='submitVoucher()'>
         </div>
       </div>
       <div class="user-beer-input">
@@ -39,7 +51,7 @@
           <input type="text" class="input" #newUserID required placeholder="User ID">
           <fa-icon [icon]="faPlus" class="add-beer-type" (click)='addnewUser(newUserID.value);newUserID.value=""'></fa-icon>
         </div>
-        <div *ngFor="let user of listUser; let i = index;">
+        <div *ngFor="let user of voucherDetail.listUser; let i = index;">
           <div class="sparater"></div>
           <div class="product-type">
             <div class="id-input-field-label">
@@ -53,10 +65,10 @@
       </div>
       <div class="user-beer-input">
         <div class="input-field">
-          <input type="text" class="input" #newBeerID required placeholder="Beer ID">
+          <input type="text" class="input" #newBeerID required placeholder="Product ID">
           <fa-icon [icon]="faPlus" class="add-beer-type" (click)='addnewBeer(newBeerID.value);newBeerID.value=""'></fa-icon>
         </div>
-        <div *ngFor="let beer of listBeer; let i = index;">
+        <div *ngFor="let beer of voucherDetail.listBeer; let i = index;">
           <div class="sparater"></div>
           <div class="product-type">
             <div class="id-input-field-label">

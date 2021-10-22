@@ -273,7 +273,7 @@ export class OrderdetailComponent implements OnInit {
       this.phone = order.phone_number;
 
       this.shipPrice = order.ship_price;
-      this.price = order.total_price;
+      this.price = order.real_price;
 
       this.totalPrice = this.shipPrice + this.price;
 

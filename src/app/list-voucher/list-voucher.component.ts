@@ -3,18 +3,26 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { NgbDateStruct } from '../object/BeerDetail';
+import { SearchQuery } from '../object/SearchQuery';
 
 import { APIService } from '../services/api.service';
+import { AppService } from '../services/app.service';
 
-export interface VoucherBasicInfo {
-  id: string;
-  code: string;
-  detail: string;
-  discount: string;
+export interface VoucherData{
+
+  voucher_second_id:string;
+  detail:string;
+  discount:number;
+  amount:number;
+  reuse:number;
+  status:string;
+  for_all_beer: boolean;
+  for_all_user: boolean;
+  dateExpir:NgbDateStruct;
+  listUser: string[];
+  listBeer: string[];
 }
-const ELEMENT_DATA: VoucherBasicInfo[] = [
-  { id: "123", code: 'BIO_MARKET_5k', detail: "Giảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàngGiảm 5k trên mọi đơn hàngGiảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàng Giảm 5k trên mọi đơn hàng", discount: "10" },
-];
 
 @Component({
   selector: 'app-list-voucher',
@@ -23,37 +31,33 @@ const ELEMENT_DATA: VoucherBasicInfo[] = [
 })
 export class ListVoucherComponent implements OnInit {
 
-  displayedColumns: string[] = ['ID', 'code', 'detail', 'discount', 'delete', 'add'];
-  data = Object.assign([]);
-  dataSource = new MatTableDataSource<Element>(this.data);
-  faTrash = faTrash
-  faPlus = faPlus
+  displayedColumns: string[] = ['ID', 'detail', 'discount', 'delete', 'add'];
+  data:VoucherData[] = [];
+  dataSource = new MatTableDataSource<VoucherData>(this.data);
+  faTrash = faTrash;
+  faPlus = faPlus;
 
   constructor(
-    private api: APIService) { }
+    private api: APIService,
+    private app: AppService) { }
 
   ngOnInit(): void {
-    this.api.GetVoucher(vouchers=>{
-      this.loadData(vouchers);
+    this.api.GetVoucher(new SearchQuery('all', 0, 1000, ''), vouchers => {
+      this.data = vouchers;
+      this.dataSource.data = vouchers;
     });
   }
 
-  loadData(response: any) {
-    for (let v of response) {
-      let voucher: VoucherBasicInfo = {
-        id: v.id,
-        code: v.voucher_second_id,
-        detail: v.detail,
-        discount: v.amount != 0 ? v.amount + '' : v.discount + '%'
-      };
-      this.data.push(voucher);
-    }
-    this.dataSource.data = this.data
-  }
-
-  deleteVoucher(product: VoucherBasicInfo): void {
-    let index: number = this.data.findIndex(d => d === product);
-    this.data.splice(index, 1)
-    this.dataSource.data = this.data
+  deleteVoucher(voucher: VoucherData): void {
+    this.api.DeleteVoucher(voucher, result => {
+      if (result) {
+        let index: number = this.data.findIndex(d => d.voucher_second_id === voucher.voucher_second_id);
+        this.data.splice(index, 1)
+        this.dataSource.data = this.data;
+        this.app.changeNotification('Xóa voucher thành công!!!');
+      } else {
+        this.app.changeNotification('Error: Không thể xóa voucher!!!');
+      }
+    });
   }
 }

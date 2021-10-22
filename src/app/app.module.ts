@@ -21,7 +21,6 @@ import { BeerDetailComponent } from './beer-detail/beer-detail.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ListBeerComponent } from './list-beer/list-beer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { VoucherComponent } from './voucher/voucher.component';
 import { NotificationComponent } from './notification/notification.component';
 import { VoucherDetailComponent } from './voucher-detail/voucher-detail.component';
 import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
@@ -32,6 +31,7 @@ import { AuthInterceptor } from './Injectable/AuthInterceptor ';
 import { OrderdetailComponent } from './orderdetail/orderdetail.component';
 import { MoneyFormatPipe } from './pipe/money-format.pipe';
 import { AccountComponent } from './account/account.component';
+import { VoucherComponent } from './voucher/voucher.component';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -50,7 +50,6 @@ const httpInterceptorProviders = [
     BeerDetailComponent,
     PageNotFoundComponent,
     ListBeerComponent,
-    VoucherComponent,
     NotificationComponent,
     VoucherDetailComponent,
     NotificationDetailComponent,
@@ -59,7 +58,8 @@ const httpInterceptorProviders = [
     LoginComponent,
     OrderdetailComponent,
     MoneyFormatPipe,
-    AccountComponent
+    AccountComponent,
+    VoucherComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +81,7 @@ const httpInterceptorProviders = [
           }
         ]
       },
-      { path: 'orders', component: OrdersComponent },
+      { path: 'orders/:status', component: OrdersComponent },
       { path: 'setting', component: SettingComponent },
       { path: 'images', component: ImagesComponent },
       { path: 'orderdetail/:orderid', component: OrderdetailComponent },

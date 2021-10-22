@@ -1,5 +1,6 @@
 <div class="topHeader">
   <header class="headerTitle">Trùm Biển</header>
+  <a routerLink="/orders/new" class="neworder" *ngIf="haveNewOrderer" (click)='showNewOrder()'>Có Đơn Hàng Mới!</a>
 </div>
 <input type="checkbox" id="check">
 <label class="hide-checkbox" for="check">
@@ -9,7 +10,7 @@
   <ul>
     <li><a routerLink="/users"><fa-icon [icon]="faUser" ></fa-icon>Người Dùng</a></li>
     <li><a routerLink="/beers"><fa-icon [icon]="faBeer"></fa-icon>Sản Phẩm</a></li>
-    <li><a routerLink="/orders"><fa-icon [icon]="faShoppingCart"></fa-icon>Đơn Hàng</a></li>
+    <li><a routerLink="/orders/all"><fa-icon [icon]="faShoppingCart"></fa-icon>Đơn Hàng{{totalOrderer>0?'('+totalOrderer+')':''}}</a></li>
     <li><a routerLink="/setting"><fa-icon [icon]="faCogs"></fa-icon>Cài Đặt</a></li>
     <li><a routerLink="/images"><fa-icon [icon]="faImages"></fa-icon>Hình Ảnh</a></li>
     <li><a routerLink="/voucher"><fa-icon [icon]="faGift"></fa-icon>Voucher</a></li>

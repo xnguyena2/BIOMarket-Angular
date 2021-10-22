@@ -14,6 +14,8 @@ import { AppService } from './app.service';
 import { ObjectID } from '../object/ObjectID';
 import { UpdatePassword } from '../object/UpdatePassword';
 import { Buyer } from '../object/Buyer';
+import { VoucherData } from '../list-voucher/list-voucher.component';
+import { StreamService } from './stream.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,22 +24,38 @@ export class APIService {
   HostURL = AppConfig.BaseUrl;
 
   currentOrderResult: OrderSearchResult = null;
+  newOrderResult: OrderSearchResult = null;
+
+  currentVoucher:VoucherData[] = null;
 
   constructor(
     private requestServices: RequestService,
-    private appServices: AppService) { }
+    private appServices: AppService,
+    private stream: StreamService) { }
 
-    formaPass(us: UpdatePassword){
+  formaPass(us: UpdatePassword) {
 
-      if(us.oldpassword && us.oldpassword != ''){
-        us.oldpassword = new Md5().appendStr(us.oldpassword).end().toString().toUpperCase();
-      }
-
-      if(us.newpassword && us.newpassword != ''){
-        us.newpassword = new Md5().appendStr(us.newpassword).end().toString().toUpperCase();
-      }
-
+    if (us.oldpassword && us.oldpassword != '') {
+      us.oldpassword = new Md5().appendStr(us.oldpassword).end().toString().toUpperCase();
     }
+
+    if (us.newpassword && us.newpassword != '') {
+      us.newpassword = new Md5().appendStr(us.newpassword).end().toString().toUpperCase();
+    }
+
+  }
+
+  public Stream() {
+    this.stream.GetServerSentEvent(`${this.HostURL}stream/admin/order`).subscribe(newOrder => {
+      this.AddNewOrder(newOrder);
+      this.appServices.haveNewOrderer('(Đơn Hàng Mới!!!!)');
+      console.log(newOrder);
+    }, err => {
+      setInterval(() => {
+        this.appServices.changeNotification('Lost connect to server, please refresh page!!!!!');
+      }, 3000);
+    });
+  }
 
   public AdminLogin(user: UserInfo, cb: (result: boolean) => void) {
     const md5 = new Md5();
@@ -157,7 +175,7 @@ export class APIService {
       });
   }
 
-  public AdminGetAllBuyer(searchQuery: SearchQuery, cb:(result: Buyer[] | null)=>void){
+  public AdminGetAllBuyer(searchQuery: SearchQuery, cb: (result: Buyer[] | null) => void) {
     return this.requestServices.post(`${this.HostURL}buyer/admin/getall`, searchQuery).subscribe(
       event => {
         if (event instanceof HttpResponse) {
@@ -239,6 +257,10 @@ export class APIService {
     }
   }
 
+  public GetNewListOrder() {
+    return this.newOrderResult;
+  }
+
   public UpdateOrderList(searchQuery: SearchQuery) {
     this.requestServices.post(`${this.HostURL}order/admin/all`, searchQuery).subscribe(
       event => {
@@ -246,12 +268,29 @@ export class APIService {
           console.log('order result: ');
           //console.log(event.body);
           this.currentOrderResult = event.body;
+          this.newOrderResult = null;
           this.appServices.changeOrder(event.body);
         }
       },
       err => {
         console.log(err);
       });
+  }
+
+  public AddNewOrder(newOrder: PackageOrder) {
+    if (this.newOrderResult === null) {
+      this.newOrderResult = {
+        count: 1,
+        result: [newOrder]
+      }
+    } else {
+      const existID = this.newOrderResult.result.findIndex(x => x.package_order_second_id === newOrder.package_order_second_id);
+      if (existID >= 0) {
+        return
+      }
+      this.newOrderResult.count++;
+      this.newOrderResult.result.push(newOrder);
+    }
   }
 
   public RemoveOrder(id: string) {
@@ -334,7 +373,7 @@ export class APIService {
         }
       },
       err => {
-        console.log('Could not generate beer ID!');
+        console.log('Could not generate product ID!');
         console.log(err);
 
       });
@@ -357,14 +396,12 @@ export class APIService {
       });
   }
 
-  public GetVoucher(cb: (vouchers) => void) {
-    this.requestServices.post(AppConfig.BaseUrl + 'voucher/getall', {
-      page: 0,
-      size: 100
-    }).subscribe(
+  public GetVoucher(searchQuery: SearchQuery, cb: (vouchers) => void) {
+    this.requestServices.post(AppConfig.BaseUrl + 'voucher/admin/getall', searchQuery).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
+          this.currentVoucher = event.body;
           cb(event.body);
         }
       },
@@ -372,6 +409,72 @@ export class APIService {
         console.log('Could not get all Voucher!');
         console.log(err);
 
+      });
+  }
+
+  public GetVoucherDetail(id: string, cb: (VoucherData)=>void){
+    if (this.currentVoucher !== null) {
+      let matchVoucher = this.currentVoucher.find(x => x.voucher_second_id === id);
+      if (matchVoucher) {
+        cb(matchVoucher);
+        return;
+      }
+    }
+    this.requestServices.get(`${this.HostURL}voucher/admin/detail/${id}`).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('voucher detail: ');
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+      });
+  }
+
+  //generate voucherID
+  public GenerateVoucherID(cb: (string) => void) {
+    this.requestServices.get(AppConfig.BaseUrl + 'voucher/admin/generateid').subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log(event.body);
+          cb(event.body.response);
+        }
+      },
+      err => {
+        console.log('Could not generate product ID!');
+        console.log(err);
+
+      });
+  }
+
+  public DeleteVoucher(voucher: VoucherData, cb: (success: boolean) => void) {
+    this.requestServices.post(`${this.HostURL}voucher/admin/delete`, voucher).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('delete voucherID: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
+  public createVoucher(voucher: VoucherData, cb: (success: boolean) => void) {
+    this.requestServices.post(`${this.HostURL}voucher/admin/create`, voucher).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('create voucherID: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
       });
   }
 

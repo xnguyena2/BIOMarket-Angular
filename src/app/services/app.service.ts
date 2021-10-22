@@ -17,6 +17,9 @@ export class AppService {
   private notificationSource = new BehaviorSubject<string>(this.IGNORESTR);
   private notification = this.notificationSource.asObservable();
 
+  private newOrderTotificationSource = new BehaviorSubject<string>(this.IGNORESTR);
+  private newOrderTotification = this.newOrderTotificationSource.asObservable();
+
   constructor() { }
 
   //alter
@@ -36,5 +39,14 @@ export class AppService {
   }
   public changeNotification(filter: string) {
     this.notificationSource.next(filter);
+  }
+
+
+  //new order notification
+  public registerNewOrderNotification(func: (filter: string) => void) {
+    this.newOrderTotification.pipe(filter(x => x !== this.IGNORESTR)).subscribe(f => func(f));
+  }
+  public haveNewOrderer(filter: string) {
+    this.newOrderTotificationSource.next(filter);
   }
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
 import { ActivatedRoute } from '@angular/router';
-import { RequestService } from '../services/request.service';
+
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
-import { NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { VoucherData } from '../list-voucher/list-voucher.component';
+import { APIService } from '../services/api.service';
+import { AppService } from '../services/app.service';
 
 
 @Component({
@@ -16,58 +17,93 @@ import { NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 })
 export class VoucherDetailComponent implements OnInit {
 
-  alertMessage:string;
-  alertType:string;
+  alertMessage: string;
+  alertType: string;
   //
 
   faPlus = faPlus;
   faTrash = faTrash;
 
-  voucherName:string;
-  voucherID:string;
-  voucherDetail:string;
-  voucherAmount:number;
-  voucherDiscount:number;
-  dateExpir:NgbDateStruct;
+  voucherDetail: VoucherData;
 
-  newUserID:string;
+  voucherID: string;
 
-  listUser:string[] = [];
+  isDisableSubmitButton: boolean;
+  isDisableID: boolean;
 
-  listBeer:string[] = [];
+  constructor(
+    private route: ActivatedRoute,
+    private app: AppService,
+    private api: APIService) { }
 
-  constructor(private route: ActivatedRoute,
-    private requestServices: RequestService
-    ) { }
+    showConfigView(): boolean {
+      return this.voucherID !== 'newVoucher';
+    }
 
   ngOnInit(): void {
+    this.voucherDetail = this.getDefaultDetail();
+    this.voucherID = this.route.snapshot.paramMap.get('voucherId');
+    this.isDisableSubmitButton = true;
+    if (this.showConfigView()) {
+      console.log(this.voucherID);
+      this.isDisableID = true;
+      this.api.GetVoucherDetail(this.voucherID, voucherDetail => {
+        this.voucherDetail = voucherDetail;
+        this.isDisableSubmitButton = false;
+      });
+    } else {
+      this.isDisableSubmitButton = false;
+      this.isDisableID = false;
+    }
   }
 
-  showConfigView(): boolean {
-    return this.voucherID !== 'newVoucher';
+  getDefaultDetail(){
+    return {
+      voucher_second_id:this.voucherID,
+      detail:'',
+      discount:0,
+      amount:0,
+      reuse:-1,
+      status:null,
+      for_all_beer: false,
+      for_all_user: false,
+      dateExpir:null,
+      listUser: [],
+      listBeer: []
+
+    };
   }
 
-  removeUser(index:number):void{
+  removeUser(index: number): void {
     console.log('remove: ' + index);
 
-    this.listUser.splice(index, 1);
+    this.voucherDetail.listUser.splice(index, 1);
   }
 
-  addnewUser(user:string):void{
-    this.listUser.push(user);
+  addnewUser(user: string): void {
+    this.voucherDetail.listUser.push(user);
   }
 
-  removeBeer(index:number):void{
+  removeBeer(index: number): void {
     console.log('remove: ' + index);
 
-    this.listBeer.splice(index, 1);
+    this.voucherDetail.listBeer.splice(index, 1);
   }
 
-  addnewBeer(user:string):void{
-    this.listBeer.push(user);
+  addnewBeer(product: string): void {
+    this.voucherDetail.listBeer.push(product);
   }
 
-  submitVoucher():void{
-
+  submitVoucher(): void {
+    this.isDisableSubmitButton = true;
+    this.api.createVoucher(this.voucherDetail, result=>{
+      if (result) {
+        this.app.changeNotification('update voucher thành công!!!');
+        this.isDisableSubmitButton = false;
+      } else {
+        this.app.changeNotification('Error: update voucher failt!!!');
+        this.isDisableSubmitButton = false;
+      }
+    });
   }
 }

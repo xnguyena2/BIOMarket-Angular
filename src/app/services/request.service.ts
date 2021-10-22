@@ -4,8 +4,6 @@ import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
-import {ShippingProvider, DeviceConfigData} from '../setting/setting.component';
-
 @Injectable({
   providedIn: 'root'
 })
