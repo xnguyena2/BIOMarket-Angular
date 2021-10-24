@@ -1,0 +1,147 @@
+<div class="compoment-container">
+  <div class="container-sub">
+    <div class="content-table">
+      <form action="" class="setting-form">
+        <div class="input-field">
+          <label for="">Trong Vòng bao nhiêu ngày:</label>
+          <input type="number" name="date" class="text-input" placeholder="Ngày" [(ngModel)]='date'>
+        </div>
+        <div class="input-field">
+          <a class="update-btn create-btn" (click)='applyChange()'>Apply</a>
+        </div>
+      </form>
+    </div>
+    <div class="content-table">
+      <div class="statistic-container">
+        <div class="statistic-data-container">
+          <label class="statistic-title" for="">Tổng Tiền Nhập:</label>
+          <span>{{total_price_import | moneyFormat}}</span>
+        </div>
+        <div class="statistic-data-container">
+          <label class="statistic-title" for="">Tổng Số Lượng Nhập:</label>
+          <span>{{total_number_import}}</span>
+        </div>
+
+        <div class="statistic-data-container">
+          <label class="statistic-title" for="">Tổng Tiền Bán:</label>
+          <span>{{total_price_sell | moneyFormat}}</span>
+        </div>
+        <div class="statistic-data-container">
+        </div>
+
+        <div class="statistic-data-container">
+          <label class="statistic-title" for="">Lợi Nhuận:</label>
+          <span>{{total_price_sell - total_price_import | moneyFormat}}</span>
+        </div>
+      </div>
+    </div>
+    <h4 class="title">Quản lý kho hàng</h4>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 content-table">
+
+      <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> ID </th>
+        <td mat-cell *matCellDef="let element"> <a>{{element.product_import_second_id}}</a> </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Price">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Tổng Tiền </th>
+        <td mat-cell *matCellDef="let element"> {{element.price | moneyFormat}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Amount">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Số Lượng </th>
+        <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Detail">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Thông Tin </th>
+        <td mat-cell *matCellDef="let element"> {{element.detail}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Createat">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Ngày </th>
+        <td mat-cell *matCellDef="let element"> {{element.createat}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Xóa </th>
+        <td mat-cell *matCellDef="let element">
+          <fa-icon [icon]="faTrash" class="cursor-btn" (click)="deleteRecord(element)"></fa-icon>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="add">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"><a (click)='showAddNewRecord(true)'><fa-icon [icon]="faPlus" class="add-btn"></fa-icon></a></th>
+        <td mat-cell *matCellDef="let element"></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-header"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-rows"></tr>
+    </table>
+
+    <h4 class="title">Đơn Hàng</h4>
+    <table mat-table [dataSource]="productOrderDataSource" class="mat-elevation-z8 content-table">
+
+      <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> ID </th>
+        <td mat-cell *matCellDef="let element"> <a [routerLink]='["/orderdetail", element.package_order_second_id]'>{{element.id}}</a> </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Tên Sản Phẩm </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Price">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Giá </th>
+        <td mat-cell *matCellDef="let element"> {{element.total_price | moneyFormat}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Createat">
+        <th mat-header-cell *matHeaderCellDef class="table-header-col"> Ngày </th>
+        <td mat-cell *matCellDef="let element"> {{element.createat}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedinvokeColumns" class="table-header"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedinvokeColumns;" class="row-rows"></tr>
+    </table>
+  </div>
+</div>
+
+<div class="crate-account" *ngIf="addNewRecordPopup" (click)='showAddNewRecord(false)'>
+  <form action="" class="update-info absolut-center crate-account-form" (click)='$event.stopPropagation();'>
+    <div class="input-field">
+      <label for="">Tiền:</label>
+      <input type="number" name="currentRecordPrice" class="text-input" placeholder="Số tiền mua vào" [(ngModel)]='currentRecordPrice'>
+    </div>
+    <div class="input-field">
+      <label for="">Số Lượng:</label>
+      <input type="number" name="currentRecordAmount" class="text-input" placeholder="Số lượng nhập vào" [(ngModel)]='currentRecordAmount'>
+    </div>
+    <div class="input-field">
+      <label for="">Thông Tin:</label>
+      <textarea name="currentRecordDetail" class="text-input" placeholder="Thông tin chi tiết" [(ngModel)]='currentRecordDetail'></textarea>
+    </div>
+    <div class="input-field">
+      <a class="update-btn create-btn" (click)='createNewRecord()' [disabled]='disableCreateBtn'>Create</a>
+    </div>
+  </form>
+</div>
+

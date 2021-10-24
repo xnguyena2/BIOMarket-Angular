@@ -16,6 +16,8 @@ import { UpdatePassword } from '../object/UpdatePassword';
 import { Buyer } from '../object/Buyer';
 import { VoucherData } from '../list-voucher/list-voucher.component';
 import { StreamService } from './stream.service';
+import { ProductImport } from '../object/ProductImport';
+import { ProductOrder } from '../object/ProductOrder';
 
 @Injectable({
   providedIn: 'root'
@@ -85,6 +87,67 @@ export class APIService {
       event => {
         if (event instanceof HttpResponse) {
           console.log('Logout user result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
+  public AdminGetAllProductImport(subPath: string, searchQuery: SearchQuery, cb: (result: ProductImport[]) => void) {
+
+    return this.requestServices.post(`${this.HostURL}productimport/admin/${subPath}`, searchQuery).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('all product import result: ');
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+      });
+  }
+
+  public AdminGetAllProductOrder(subPath: string, searchQuery: SearchQuery, cb: (result: ProductOrder[]) => void) {
+
+    return this.requestServices.post(`${this.HostURL}statistic/admin/${subPath}`, searchQuery).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('all product order result: ');
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+      });
+  }
+
+  public AdminCreateProductImport(newProduct: ProductImport, cb: (result: boolean) => void) {
+
+    return this.requestServices.post(`${this.HostURL}productimport/admin/create`, newProduct).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('create product import result: ');
+          console.log(event.body);
+          cb(true);
+        }
+      },
+      err => {
+        console.log(err);
+        cb(false);
+      });
+  }
+
+  public DeleteProductImport(productID: string, cb: (success: boolean) => void) {
+    this.requestServices.delete(`${this.HostURL}productimport/admin/delete/${productID}`).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('delete product importance: ');
           console.log(event.body);
           cb(true);
         }
@@ -366,8 +429,8 @@ export class APIService {
   }
 
   //generate productID
-  public GenerateProductID(cb: (string) => void) {
-    this.requestServices.get(AppConfig.BaseUrl + 'beer/admin/generateid').subscribe(
+  public GenerateID(cb: (string) => void) {
+    this.requestServices.get(AppConfig.BaseUrl + 'util/admin/generateid').subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log(event.body);
@@ -375,7 +438,7 @@ export class APIService {
         }
       },
       err => {
-        console.log('Could not generate product ID!');
+        console.log('Could not generate ID!');
         console.log(err);
 
       });
@@ -431,22 +494,6 @@ export class APIService {
       },
       err => {
         console.log(err);
-      });
-  }
-
-  //generate voucherID
-  public GenerateVoucherID(cb: (string) => void) {
-    this.requestServices.get(AppConfig.BaseUrl + 'voucher/admin/generateid').subscribe(
-      event => {
-        if (event instanceof HttpResponse) {
-          console.log(event.body);
-          cb(event.body.response);
-        }
-      },
-      err => {
-        console.log('Could not generate product ID!');
-        console.log(err);
-
       });
   }
 

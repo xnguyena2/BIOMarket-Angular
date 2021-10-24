@@ -31,6 +31,8 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
   faPlus = faPlus;
   faTrash = faTrash;
 
+  readonly subPath:string = 'getbyproductid';
+
   @ViewChild('imageManager')
   set imgUploadManager(imageManager: UploadImageComponent) {
     if (imageManager !== undefined) {
@@ -68,7 +70,7 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
         }
       });
     } else {
-      this.api.GenerateProductID(beerID => {
+      this.api.GenerateID(beerID => {
         this.beerID = beerID;
         this.isDisableSubmitButton = false;
       });

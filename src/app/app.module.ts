@@ -32,6 +32,7 @@ import { OrderdetailComponent } from './orderdetail/orderdetail.component';
 import { MoneyFormatPipe } from './pipe/money-format.pipe';
 import { AccountComponent } from './account/account.component';
 import { VoucherComponent } from './voucher/voucher.component';
+import { ProductImportComponent } from './product-import/product-import.component';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -59,7 +60,8 @@ const httpInterceptorProviders = [
     OrderdetailComponent,
     MoneyFormatPipe,
     AccountComponent,
-    VoucherComponent
+    VoucherComponent,
+    ProductImportComponent
   ],
   imports: [
     BrowserModule,
