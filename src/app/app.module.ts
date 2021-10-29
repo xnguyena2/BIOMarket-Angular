@@ -33,6 +33,7 @@ import { MoneyFormatPipe } from './pipe/money-format.pipe';
 import { AccountComponent } from './account/account.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { ProductImportComponent } from './product-import/product-import.component';
+import { DatetimePipe } from './pipe/datetime.pipe';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -61,7 +62,8 @@ const httpInterceptorProviders = [
     MoneyFormatPipe,
     AccountComponent,
     VoucherComponent,
-    ProductImportComponent
+    ProductImportComponent,
+    DatetimePipe
   ],
   imports: [
     BrowserModule,
@@ -102,6 +104,7 @@ const httpInterceptorProviders = [
       { path: 'notification', component: NotificationComponent },
       { path: 'login', component: LoginComponent },
       { path: 'account', component: AccountComponent },
+      { path: 'analytics', component: ProductImportComponent },
       { path: '**', component: PageNotFoundComponent }
     ]),
     BrowserAnimationsModule,

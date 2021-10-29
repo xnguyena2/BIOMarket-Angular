@@ -23,15 +23,28 @@
         </div>
 
         <div class="statistic-data-container">
-          <label class="statistic-title" for="">Tổng Tiền Bán:</label>
+          <label class="statistic-title" for="">Tổng Tiền Đã Đặt:</label>
           <span>{{total_price_sell | moneyFormat}}</span>
         </div>
-        <div class="statistic-data-container">
+
+        <div class="statistic-data-container" *ngIf="isStatictis">
+          <label class="statistic-title" for="">Tổng Tiền Đã Bán:</label>
+          <span>{{total_price | moneyFormat}}</span>
         </div>
 
-        <div class="statistic-data-container">
-          <label class="statistic-title" for="">Lợi Nhuận:</label>
-          <span>{{total_price_sell - total_price_import | moneyFormat}}</span>
+        <div class="statistic-data-container" *ngIf="isStatictis">
+          <label class="statistic-title" for="">Tổng Tiền Thu:</label>
+          <span>{{real_price | moneyFormat}}</span>
+        </div>
+
+        <div class="statistic-data-container" *ngIf="isStatictis">
+          <label class="statistic-title" for="">Tổng Tiền Voucher:</label>
+          <span>{{total_price - real_price | moneyFormat}}</span>
+        </div>
+
+        <div class="statistic-data-container" *ngIf="isStatictis">
+          <label class="statistic-title" for="">Lợi Nhuận Thật:</label>
+          <span>{{real_price - total_price_import | moneyFormat}}</span>
         </div>
       </div>
     </div>
@@ -68,7 +81,7 @@
       <!-- Symbol Column -->
       <ng-container matColumnDef="Createat">
         <th mat-header-cell *matHeaderCellDef class="table-header-col"> Ngày </th>
-        <td mat-cell *matCellDef="let element"> {{element.createat}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.createat | datetime}} </td>
       </ng-container>
 
       <!-- Symbol Column -->
@@ -116,7 +129,7 @@
       <!-- Symbol Column -->
       <ng-container matColumnDef="Createat">
         <th mat-header-cell *matHeaderCellDef class="table-header-col"> Ngày </th>
-        <td mat-cell *matCellDef="let element"> {{element.createat}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.createat | datetime}} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedinvokeColumns" class="table-header"></tr>

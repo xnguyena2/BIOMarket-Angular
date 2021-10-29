@@ -10,8 +10,8 @@ import { faImages } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { faGift } from '@fortawesome/free-solid-svg-icons';
 import { faTasks } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar } from '@fortawesome/free-solid-svg-icons';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
-import { APIService } from './services/api.service';
 import { AppService } from './services/app.service';
 
 @Component({
@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
   faBell = faBell;
   faGift = faGift;
   faTasks = faTasks;
+  faChartBar = faChartBar;
 
   alertType: string;
   alertMessage: string = '';

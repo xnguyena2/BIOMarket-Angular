@@ -18,6 +18,7 @@ import { VoucherData } from '../list-voucher/list-voucher.component';
 import { StreamService } from './stream.service';
 import { ProductImport } from '../object/ProductImport';
 import { ProductOrder } from '../object/ProductOrder';
+import { TotalOrder } from '../object/TotalOrder';
 
 @Injectable({
   providedIn: 'root'
@@ -118,6 +119,21 @@ export class APIService {
       event => {
         if (event instanceof HttpResponse) {
           console.log('all product order result: ');
+          console.log(event.body);
+          cb(event.body);
+        }
+      },
+      err => {
+        console.log(err);
+      });
+  }
+
+  public AdminGetTotalOrder(searchQuery: SearchQuery, cb: (result: TotalOrder) => void) {
+
+    return this.requestServices.post(`${this.HostURL}statistic/admin/gettotal`, searchQuery).subscribe(
+      event => {
+        if (event instanceof HttpResponse) {
+          console.log('all total order result: ');
           console.log(event.body);
           cb(event.body);
         }

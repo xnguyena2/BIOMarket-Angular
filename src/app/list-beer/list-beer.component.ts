@@ -19,7 +19,7 @@ export class ListBeerComponent implements OnInit {
 
   readonly maxSearResult: number = 1000;
 
-  displayedColumns: string[] = ['ID', 'name', 'sold', 'order', 'delete', 'add'];
+  displayedColumns: string[] = ['name', 'sold', 'order', 'delete', 'add'];
   listProduct: BeerDetail[] = [];
   dataSource = new MatTableDataSource<BeerDetail>(this.listProduct);
   faTrash = faTrash

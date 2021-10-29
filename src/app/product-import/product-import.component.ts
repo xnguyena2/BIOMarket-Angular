@@ -39,11 +39,16 @@ export class ProductImportComponent implements OnInit {
   total_price_import: number = 0;
   total_number_import: number = 0;
 
+  total_price: number = 0;
+  real_price: number = 0;
+
   total_price_sell: number = 0;
 
 
-  @Input() subPath: string;
+  @Input() subPath: string = 'getall';
   @Input() productID: string;
+
+  isStatictis: boolean;
 
   constructor(private api: APIService,
     private app: AppService) { }
@@ -52,6 +57,7 @@ export class ProductImportComponent implements OnInit {
     console.log(this.productID);
     this.getAllRecord();
     this.getAllProductOrder();
+    this.isStatictis = this.subPath === 'getall';
   }
 
   getAllRecord() {
@@ -74,6 +80,12 @@ export class ProductImportComponent implements OnInit {
       this.productOrderDataSource.data = result;
       this.total_price_sell = result.reduce((a, b) => a + b.total_price, 0);
     });
+    if (this.isStatictis) {
+      this.api.AdminGetTotalOrder(new SearchQuery('DONE', 0, 0, this.date.toString()), (result) => {
+        this.real_price = result.real_price;
+        this.total_price = result.total_price;
+      });
+    }
   }
 
   deleteRecord(elment: ProductImport) {

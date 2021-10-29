@@ -12,7 +12,7 @@ import { APIService } from '../services/api.service';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-  displayedColumns: string[] = ['ID', 'user', 'address', 'region', 'district', 'ward', 'phone', 'totalprice', 'shipprice', 'delete'];
+  displayedColumns: string[] = ['user', 'address', 'region', 'district', 'ward', 'phone', 'totalprice', 'shipprice', 'time'];
   readonly maxSearResult: number = 50;
 
   listProduct: PackageOrder[] = [];
