@@ -1,6 +1,6 @@
 
 export const AppConfig = {
-  BaseUrl : 'http://localhost:5000/',
+  BaseUrl : '/',//:'http://localhost:5000/',
   TimeRefresh: 15,//mins
   FilterDrop: [{
     value: 'default',
