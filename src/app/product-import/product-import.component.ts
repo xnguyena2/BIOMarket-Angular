@@ -55,9 +55,9 @@ export class ProductImportComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.productID);
+    this.isStatictis = this.subPath === 'getall';
     this.getAllRecord();
     this.getAllProductOrder();
-    this.isStatictis = this.subPath === 'getall';
   }
 
   getAllRecord() {
