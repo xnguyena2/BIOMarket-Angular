@@ -282,11 +282,20 @@ export class OrderdetailComponent implements OnInit {
       this.dataSource.data = this.listProduct;
     });
   }
-  closeOrder() {
-    this.api.CloseOrder(this.id, result => {
+
+  closeOrder(status: string) {
+    this.api.CloseOrder(this.id, status, result => {
       this.api.RemoveOrder(this.id);
       this.app.changeNotification("Đóng đơn thành công!");
     });
+  }
+
+  doneOrder(){
+    this.closeOrder("DONE");
+  }
+
+  cancelOrder(){
+    this.closeOrder("CANCEL");
   }
 
   private getPrinterSource(invoke: any) {

@@ -404,11 +404,12 @@ export class APIService {
       });
   }
 
-  public CloseOrder(id: string, cb: (order: PackageOrder) => void) {
-    const closeorder: ObjectID = {
-      id: id
+  public CloseOrder(id: string, status: string, cb: (order: PackageOrder) => void) {
+    const closeorder = {
+      id: id,
+      status: status
     }
-    this.requestServices.post(`${this.HostURL}order/admin/done`, closeorder).subscribe(
+    this.requestServices.post(`${this.HostURL}order/admin/close`, closeorder).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           console.log('close order: ');

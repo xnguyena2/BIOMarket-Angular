@@ -48,3 +48,6 @@
   font-weight: normal;
   margin: 0 auto;
 }
+.close-order{
+  background-color: red;
+}

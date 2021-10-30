@@ -20,7 +20,7 @@ export class UsersComponent implements OnInit {
     private app: AppService,) { }
 
   ngOnInit(): void {
-    this.api.AdminGetAllBuyer(new SearchQuery('all', 0, 1000, ''), (result) => {
+    this.api.AdminGetAllBuyer(new SearchQuery('all', 0, 1000, 'DONE'), (result) => {
       if(result === null){
         this.app.changeNotification('Error: Không thể kết nối server!!!');
         return;

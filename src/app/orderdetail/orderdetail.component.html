@@ -91,10 +91,13 @@
           <span>{{totalPrice | moneyFormat}}</span>
         </div>
         <div class="pair-info no-bottom-border">
-          <a (click)="closeOrder()" class="close">Đóng Đơn Hàng</a>
+          <a (click)="Print(printer)" class="close">In Hóa Đơn</a>
         </div>
         <div class="pair-info no-bottom-border">
-          <a (click)="Print(printer)" class="close">In Hóa Đơn</a>
+          <a (click)="doneOrder()" class="close">Thành Công</a>
+        </div>
+        <div class="pair-info no-bottom-border">
+          <a (click)="cancelOrder()" class="close close-order">Hủy Đơn Hàng</a>
         </div>
       </form>
       <iframe frameborder="0" #printer>

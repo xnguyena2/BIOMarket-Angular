@@ -51,7 +51,7 @@ export class OrdersComponent implements OnInit {
   deletePackage(order: PackageOrder) {
     console.log(order);
 
-    this.api.CloseOrder(order.package_order_second_id, result => {
+    this.api.CloseOrder(order.package_order_second_id, 'CANCEL', result => {
       this.api.RemoveOrder(order.package_order_second_id);
     });
   }
