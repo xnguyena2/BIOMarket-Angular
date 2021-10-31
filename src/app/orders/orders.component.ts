@@ -13,7 +13,10 @@ import { APIService } from '../services/api.service';
 })
 export class OrdersComponent implements OnInit {
   displayedColumns: string[] = ['user', 'address', 'region', 'district', 'ward', 'phone', 'totalprice', 'shipprice', 'time'];
-  readonly maxSearResult: number = 50;
+  readonly maxSearResult: number = 100;
+
+  orderStatus: string = 'ORDER';
+  date: number = 30;
 
   listProduct: PackageOrder[] = [];
   dataSource = new MatTableDataSource<PackageOrder>(this.listProduct);
@@ -34,7 +37,7 @@ export class OrdersComponent implements OnInit {
           this.dataSource.data = this.listProduct;
         } else {
 
-          this.api.SearcOrder(new SearchQuery('ORDER', 0, this.maxSearResult, ''), result => {
+          this.api.SearcOrder(new SearchQuery(this.orderStatus, 0, this.maxSearResult, this.date.toString()), result => {
             if (result === null) {
 
             } else {
@@ -57,7 +60,7 @@ export class OrdersComponent implements OnInit {
   }
 
   refresh() {
-    this.api.UpdateOrderList(new SearchQuery('ORDER', 0, this.maxSearResult, ''));
+    this.api.UpdateOrderList(new SearchQuery(this.orderStatus, 0, this.maxSearResult, this.date.toString()));
   }
 
 }

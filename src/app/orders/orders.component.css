@@ -20,3 +20,21 @@
 .refresh:active{
   transform: scale(0.9);
 }
+
+
+.input-field{
+  width: 300px;
+  display: grid;
+  margin-left: 25px;
+  margin-top: 10px;
+  grid-template-columns: 120px auto;
+  align-items: center;
+}
+
+.select{
+  margin-left: 10px;
+  border: 1px solid #d5dbd9;
+  outline: none;
+  padding: 8px 10px;
+  border-radius: 3px;
+}

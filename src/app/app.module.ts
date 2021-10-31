@@ -34,6 +34,7 @@ import { AccountComponent } from './account/account.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { ProductImportComponent } from './product-import/product-import.component';
 import { DatetimePipe } from './pipe/datetime.pipe';
+import { ProductStatusPipe } from './pipe/product-status.pipe';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -63,7 +64,8 @@ const httpInterceptorProviders = [
     AccountComponent,
     VoucherComponent,
     ProductImportComponent,
-    DatetimePipe
+    DatetimePipe,
+    ProductStatusPipe
   ],
   imports: [
     BrowserModule,

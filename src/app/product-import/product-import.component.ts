@@ -14,7 +14,7 @@ import { AppService } from '../services/app.service';
 })
 export class ProductImportComponent implements OnInit {
   readonly displayedColumns: string[] = ['ID', 'Price', 'Amount', 'Detail', 'Createat', 'delete', 'add'];
-  readonly displayedinvokeColumns: string[] = ['ID', 'Name', 'Price', 'Createat'];
+  readonly displayedinvokeColumns: string[] = ['ID', 'Name', 'Price', 'Status', 'Createat'];
 
   listRecord: ProductImport[] = [];
   dataSource = new MatTableDataSource<ProductImport>(this.listRecord);
@@ -44,6 +44,10 @@ export class ProductImportComponent implements OnInit {
 
   total_price_sell: number = 0;
 
+  total_price_done: number = 0;
+  total_price_cancel: number = 0;
+  total_price_ordering: number = 0;
+
 
   @Input() subPath: string = 'getall';
   @Input() productID: string;
@@ -61,7 +65,7 @@ export class ProductImportComponent implements OnInit {
   }
 
   getAllRecord() {
-    this.api.AdminGetAllProductImport(this.subPath, new SearchQuery(this.productID, 0, 1000, this.date.toString()), (result) => {
+    this.api.AdminGetAllProductImport(this.subPath, new SearchQuery(this.productID, 0, 10000, this.date.toString()), (result) => {
       this.listRecord = result;
       this.dataSource.data = result;
       let sumbO = result.reduce((a, b) => {
@@ -69,16 +73,34 @@ export class ProductImportComponent implements OnInit {
         a.number += b.amount;
         return a;
       }, { price: 0, number: 0 });
+
       this.total_price_import = sumbO.price;
       this.total_number_import = sumbO.number;
     });
   }
 
   getAllProductOrder() {
-    this.api.AdminGetAllProductOrder(this.subPath, new SearchQuery(this.productID, 0, 1000, this.date.toString()), (result) => {
+    this.api.AdminGetAllProductOrder(this.subPath, new SearchQuery(this.productID, 0, 10000, this.date.toString()), (result) => {
       this.listProductOrder = result;
       this.productOrderDataSource.data = result;
-      this.total_price_sell = result.reduce((a, b) => a + b.total_price, 0);
+
+      let statistics = result.reduce((a, b) => {
+        a.total += b.total_price;
+        if (b.status === 'CANCEL') {
+          a.cancel += b.total_price;
+        } else if (b.status === 'DONE') {
+          a.done += b.total_price;
+        } else {
+          a.ordering += b.total_price;
+        }
+        return a;
+      }, { ordering: 0, done: 0, cancel: 0, total: 0 });
+
+      this.total_price_sell = statistics.total;
+      this.total_price_done = statistics.done;
+      this.total_price_cancel = statistics.cancel;
+      this.total_price_ordering = statistics.ordering;
+
     });
     if (this.isStatictis) {
       this.api.AdminGetTotalOrder(new SearchQuery('DONE', 0, 0, this.date.toString()), (result) => {
