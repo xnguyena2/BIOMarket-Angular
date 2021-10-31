@@ -20,7 +20,7 @@ export class ProductStatusPipe implements PipeTransform {
         return 'Đã Hủy';
 
       case 'DONE':
-        return 'Hoàng Thành';
+        return 'Thành Công';
 
       default:
         return '';
