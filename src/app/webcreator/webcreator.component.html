@@ -3,7 +3,7 @@
 
     <form name="compForm">
       <div id="toolBar1">
-        <select onchange="formatDoc('formatblock',this[this.selectedIndex].value);this.selectedIndex=0;">
+        <select (change)="formatDoc('formatblock',formatblock.value)" #formatblock>
           <option selected>- formatting -</option>
           <option value="h1">Title 1 &lt;h1&gt;</option>
           <option value="h2">Title 2 &lt;h2&gt;</option>
@@ -14,14 +14,14 @@
           <option value="p">Paragraph &lt;p&gt;</option>
           <option value="pre">Preformatted &lt;pre&gt;</option>
         </select>
-        <select onchange="formatDoc('fontname',this[this.selectedIndex].value);this.selectedIndex=0;">
+        <select (change)="formatDoc('fontname',fontname.value)" #fontname>
           <option class="heading" selected>- font -</option>
           <option>Arial</option>
           <option>Arial Black</option>
           <option>Courier New</option>
           <option>Times New Roman</option>
         </select>
-        <select onchange="formatDoc('fontsize',this[this.selectedIndex].value);this.selectedIndex=0;">
+        <select (change)="formatDoc('fontsize',fontsize.value)" #fontsize>
           <option class="heading" selected>- size -</option>
           <option value="1">Very small</option>
           <option value="2">A bit small</option>
@@ -31,14 +31,14 @@
           <option value="6">Very big</option>
           <option value="7">Maximum</option>
         </select>
-        <select onchange="formatDoc('forecolor',this[this.selectedIndex].value);this.selectedIndex=0;">
+        <select (change)="formatDoc('forecolor',forecolor.value)" #forecolor>
           <option class="heading" selected>- color -</option>
           <option value="red">Red</option>
           <option value="blue">Blue</option>
           <option value="green">Green</option>
           <option value="black">Black</option>
         </select>
-        <select onchange="formatDoc('backcolor',this[this.selectedIndex].value);this.selectedIndex=0;">
+        <select (change)="formatDoc('backcolor',backcolor.value)" #backcolor>
           <option class="heading" selected>- background -</option>
           <option value="red">Red</option>
           <option value="green">Green</option>
