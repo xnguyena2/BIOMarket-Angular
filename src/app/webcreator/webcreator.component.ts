@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-webcreator',
@@ -9,6 +9,7 @@ export class WebcreatorComponent implements OnInit {
 
   showHTML: boolean = false;
 
+  @Input() innerHtml: string;
   @Output() generateHtml = new EventEmitter<string>();
 
   @ViewChild('textBox', { static: false }) oDoc!: ElementRef;
@@ -90,7 +91,7 @@ export class WebcreatorComponent implements OnInit {
   insertYoutube() {
     let youtubeSrc = prompt('Write the Youtube URL here', '');
     if (youtubeSrc && youtubeSrc != '') {
-      let elementSrc = `<iframe src="${youtubeSrc}"></iframe>`;
+      let elementSrc = `<iframe src="${youtubeSrc}" frameborder="0" allowfullscreen></iframe>`;
       this.formatDoc('insertHTML', elementSrc)
     }
   }

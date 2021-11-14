@@ -105,6 +105,11 @@ export class BeerDetailComponent implements AfterViewInit, OnInit {
     this.listUnits.splice(index, 1);
   }
 
+  generateHtml(html:string){
+    console.log(html);
+    this.beerDetail = html;
+  }
+
   submitBeer() {
     this.isDisableSubmitButton = true;
     this.listUnits.forEach((value, _) => {

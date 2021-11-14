@@ -1,5 +1,5 @@
-<div class="compoment-container">
-  <div class="container-sub">
+<!-- <div class="compoment-container">
+  <div class="container-sub"> -->
 
     <form name="compForm">
       <div id="toolBar1">
@@ -91,7 +91,7 @@
         <img class="intLink" title="Paste" (click)="formatDoc('paste', undefined);"
           src="data:image/gif;base64,R0lGODlhFgAWAIQUAD04KTRLY2tXQF9vj414WZWIbXmOrpqbmpGjudClFaezxsa0cb/I1+3YitHa7PrkIPHvbuPs+/fvrvv8/f///////////////////////////////////////////////yH5BAEAAB8ALAAAAAAWABYAAAWN4CeOZGmeaKqubGsusPvBSyFJjVDs6nJLB0khR4AkBCmfsCGBQAoCwjF5gwquVykSFbwZE+AwIBV0GhFog2EwIDchjwRiQo9E2Fx4XD5R+B0DDAEnBXBhBhN2DgwDAQFjJYVhCQYRfgoIDGiQJAWTCQMRiwwMfgicnVcAAAMOaK+bLAOrtLUyt7i5uiUhADs=" />
       </div>
-      <div #textBox contenteditable="true" class="textBox">
+      <div #textBox contenteditable="true" class="textBox" [innerHTML]="innerHtml | noSanitize">
       </div>
       <p id="editMode">
         <input type="checkbox" name="switchMode" id="switchBox" [(ngModel)]="showHTML"
@@ -102,5 +102,5 @@
         <input type="submit" value="Generate" (click)="generateHTML()"/>
       </p>
     </form>
-  </div>
-</div>
+  <!-- </div>
+</div> -->

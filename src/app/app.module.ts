@@ -36,6 +36,7 @@ import { ProductImportComponent } from './product-import/product-import.componen
 import { DatetimePipe } from './pipe/datetime.pipe';
 import { ProductStatusPipe } from './pipe/product-status.pipe';
 import { WebcreatorComponent } from './webcreator/webcreator.component';
+import { NoSanitizePipe } from './pipe/no-sanitize.pipe';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -67,7 +68,8 @@ const httpInterceptorProviders = [
     ProductImportComponent,
     DatetimePipe,
     ProductStatusPipe,
-    WebcreatorComponent
+    WebcreatorComponent,
+    NoSanitizePipe
   ],
   imports: [
     BrowserModule,

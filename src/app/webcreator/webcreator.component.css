@@ -27,3 +27,41 @@ img.intLink {
 #editMode label {
   cursor: pointer;
 }
+
+:host ::ng-deep .textBox > * {
+  max-width: 100%;
+}
+
+:host ::ng-deep .textBox > div > * {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+:host ::ng-deep .textBox > div iframe,
+:host ::ng-deep .textBox > div img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+:host {
+  max-width: 100%;
+}
+
+:host ::ng-deep * {
+  max-width: 100%;
+}
+
+:host ::ng-deep ol {
+  list-style-type: decimal;
+}
+
+:host ::ng-deep ul {
+  list-style-type: disc;
+}
+
+:host ::ng-deep li {
+  list-style: inherit;
+  margin-left: 2em;
+}
