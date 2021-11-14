@@ -40,21 +40,23 @@ export class UploadImageComponent implements OnInit {
   }
 
   deleteFile(imgID: string) {
-    this.uploadService.deleteFile(this.path + '/delete', imgID).subscribe(
-      event => {
-        if (event.type === HttpEventType.UploadProgress) {
-        } else if (event instanceof HttpResponse) {
-          console.log(event.body);
+    if (confirm('Are you sure?')) {
+      this.uploadService.deleteFile(this.path + '/delete', imgID).subscribe(
+        event => {
+          if (event.type === HttpEventType.UploadProgress) {
+          } else if (event instanceof HttpResponse) {
+            console.log(event.body);
 
-          let index: number = this.files.findIndex(d => d.imgid === imgID);
-          this.files.splice(index, 1);
-        }
-      },
-      err => {
-        console.log('Could not delete the file!');
-        console.log(err);
+            let index: number = this.files.findIndex(d => d.imgid === imgID);
+            this.files.splice(index, 1);
+          }
+        },
+        err => {
+          console.log('Could not delete the file!');
+          console.log(err);
 
-      });
+        });
+    }
   }
 
 

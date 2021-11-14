@@ -39,12 +39,14 @@ export class ListBeerComponent implements OnInit {
   }
 
   deleteProduct(product: BeerDetail): void {
-    this.api.Delete(product.beerSecondID, result => {
-      if (result) {
-        let index: number = this.listProduct.findIndex(d => d === product);
-        this.listProduct.splice(index, 1);
-        this.dataSource.data = this.listProduct;
-      }
-    });
+    if (confirm('Are you sure?')) {
+      this.api.Delete(product.beerSecondID, result => {
+        if (result) {
+          let index: number = this.listProduct.findIndex(d => d === product);
+          this.listProduct.splice(index, 1);
+          this.dataSource.data = this.listProduct;
+        }
+      });
+    }
   }
 }

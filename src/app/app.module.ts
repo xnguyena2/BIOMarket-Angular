@@ -35,6 +35,7 @@ import { VoucherComponent } from './voucher/voucher.component';
 import { ProductImportComponent } from './product-import/product-import.component';
 import { DatetimePipe } from './pipe/datetime.pipe';
 import { ProductStatusPipe } from './pipe/product-status.pipe';
+import { WebcreatorComponent } from './webcreator/webcreator.component';
 
 const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -65,7 +66,8 @@ const httpInterceptorProviders = [
     VoucherComponent,
     ProductImportComponent,
     DatetimePipe,
-    ProductStatusPipe
+    ProductStatusPipe,
+    WebcreatorComponent
   ],
   imports: [
     BrowserModule,
@@ -107,6 +109,7 @@ const httpInterceptorProviders = [
       { path: 'login', component: LoginComponent },
       { path: 'account', component: AccountComponent },
       { path: 'analytics', component: ProductImportComponent },
+      { path: 'webcreator', component: WebcreatorComponent },
       { path: '**', component: PageNotFoundComponent }
     ]),
     BrowserAnimationsModule,

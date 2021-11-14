@@ -1,20 +1,23 @@
 <div class="compoment-container">
   <div class="container-sub">
-    <div class="input-field">
-      <label for="">Tình Trạng:</label>
-      <select [(ngModel)]='orderStatus' name="newAccountRole" class="select">
-        <!-- <option *ngFor="let item of CatetoryDrop;" (value)="item.value">{{item.title}}</option> -->
-        <option value="">--Chọn--</option>
-        <option value="ORDER">Đang Đặt</option>
-        <option value="DONE">Thành Công</option>
-        <option value="CANCEL">Hủy</option>
-      </select>
+    <div class="content-table">
+      <div class="input-field">
+        <label for="">Tình Trạng:</label>
+        <select [(ngModel)]='orderStatus' name="newAccountRole" class="select">
+          <!-- <option *ngFor="let item of CatetoryDrop;" (value)="item.value">{{item.title}}</option> -->
+          <option value="">--Chọn--</option>
+          <option value="ORDER">Đang Đặt</option>
+          <option value="DONE">Thành Công</option>
+          <option value="CANCEL">Hủy</option>
+        </select>
+      </div>
+      <div class="input-field">
+        <label for="">Bao Nhiêu Ngày:</label>
+        <input type="number" name="newuserName" class="text-input" placeholder="Ngày" [(ngModel)]='date'>
+      </div>
+      <input type="button" value="Apply" class="refresh" (click)="refresh()">
     </div>
-    <div class="input-field">
-      <label for="">Bao Nhiêu Ngày:</label>
-      <input type="number" name="newuserName" class="text-input" placeholder="Ngày" [(ngModel)]='date'>
-    </div>
-    <input type="button" value="Apply" class="refresh" (click)="refresh()">
+
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 content-table">
 
       <!--- Note that these columns can be defined in any order.

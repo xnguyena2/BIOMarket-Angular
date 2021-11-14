@@ -57,7 +57,7 @@ export class AccountComponent implements OnInit {
 
       this.isAdmin = this.role === 'ROLE_ROOT' || this.role === 'ROLE_ADMIN';
 
-      if (this.isAdmin){
+      if (this.isAdmin) {
         this.getallUser();
       }
     });
@@ -82,23 +82,25 @@ export class AccountComponent implements OnInit {
 
   deleteUser(username: string, pass: string, isSelfDelete: boolean) {
 
-    let us: UpdatePassword = {
-      username: username,
-      oldpassword: pass,
-      newpassword: '',
-      roles: []
-    };
+    if (confirm('Are you sure?')) {
+      let us: UpdatePassword = {
+        username: username,
+        oldpassword: pass,
+        newpassword: '',
+        roles: []
+      };
 
-    this.api.AdminDeleteUser(us, result => {
-      if (result) {
-        this.app.changeNotification('Xóa account thành công!!!');
-        if(!isSelfDelete){
-          this.getallUser();
+      this.api.AdminDeleteUser(us, result => {
+        if (result) {
+          this.app.changeNotification('Xóa account thành công!!!');
+          if (!isSelfDelete) {
+            this.getallUser();
+          }
+        } else {
+          this.app.changeNotification('Error: Không thể xóa account!!!');
         }
-      } else {
-        this.app.changeNotification('Error: Không thể xóa account!!!');
-      }
-    }, isSelfDelete);
+      }, isSelfDelete);
+    }
   }
 
   selfDelete() {
@@ -173,7 +175,7 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  logOut(){
+  logOut() {
     this.api.Logout(result => {
       if (result) {
         this.router.navigate(['login']);

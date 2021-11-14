@@ -9,17 +9,17 @@ import { SearchQuery } from '../object/SearchQuery';
 import { APIService } from '../services/api.service';
 import { AppService } from '../services/app.service';
 
-export interface VoucherData{
+export interface VoucherData {
 
-  voucher_second_id:string;
-  detail:string;
-  discount:number;
-  amount:number;
-  reuse:number;
-  status:string;
+  voucher_second_id: string;
+  detail: string;
+  discount: number;
+  amount: number;
+  reuse: number;
+  status: string;
   for_all_beer: boolean;
   for_all_user: boolean;
-  dateExpir:NgbDateStruct;
+  dateExpir: NgbDateStruct;
   listUser: string[];
   listBeer: string[];
 }
@@ -32,7 +32,7 @@ export interface VoucherData{
 export class ListVoucherComponent implements OnInit {
 
   displayedColumns: string[] = ['ID', 'detail', 'discount', 'delete', 'add'];
-  data:VoucherData[] = [];
+  data: VoucherData[] = [];
   dataSource = new MatTableDataSource<VoucherData>(this.data);
   faTrash = faTrash;
   faPlus = faPlus;
@@ -49,15 +49,17 @@ export class ListVoucherComponent implements OnInit {
   }
 
   deleteVoucher(voucher: VoucherData): void {
-    this.api.DeleteVoucher(voucher, result => {
-      if (result) {
-        let index: number = this.data.findIndex(d => d.voucher_second_id === voucher.voucher_second_id);
-        this.data.splice(index, 1)
-        this.dataSource.data = this.data;
-        this.app.changeNotification('Xóa voucher thành công!!!');
-      } else {
-        this.app.changeNotification('Error: Không thể xóa voucher!!!');
-      }
-    });
+    if (confirm('Are you sure?')) {
+      this.api.DeleteVoucher(voucher, result => {
+        if (result) {
+          let index: number = this.data.findIndex(d => d.voucher_second_id === voucher.voucher_second_id);
+          this.data.splice(index, 1)
+          this.dataSource.data = this.data;
+          this.app.changeNotification('Xóa voucher thành công!!!');
+        } else {
+          this.app.changeNotification('Error: Không thể xóa voucher!!!');
+        }
+      });
+    }
   }
 }
