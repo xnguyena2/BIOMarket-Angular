@@ -2,6 +2,7 @@
 export const AppConfig = {
   BaseUrl: '/', //'http://localhost:5000/',
   TimeRefresh: 15,//mins
+  ImagePath: "image/admin/propose/img",
   FilterDrop: [{
     value: 'default',
     title: 'Nổi Bật'

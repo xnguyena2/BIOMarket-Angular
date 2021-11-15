@@ -1,4 +1,9 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { UploadFileService } from '../services/upload-file.service';
+
+import { Image } from '../object/BeerDetail';
+import { AppConfig } from '../config';
 
 @Component({
   selector: 'app-webcreator',
@@ -14,7 +19,7 @@ export class WebcreatorComponent implements OnInit {
 
   @ViewChild('textBox', { static: false }) oDoc!: ElementRef;
 
-  constructor() { }
+  constructor(private uploadService: UploadFileService) { }
 
   ngOnInit(): void {
     this.initDoc();
@@ -99,6 +104,60 @@ export class WebcreatorComponent implements OnInit {
   generateHTML() {
     console.log(this.oDoc.nativeElement.innerHTML);
     this.generateHtml.emit(this.oDoc.nativeElement.innerHTML);
+  }
+
+  fileBrowseHandler(files) {
+    this.prepareFilesList(files, url => {
+      if (url) {
+        console.log(url);
+        this.formatDoc('insertImage', url);
+      }
+    });
+  }
+
+
+  prepareFilesList(files: Array<any>, cb: (string) => void) {
+    for (const item of files) {
+      item.progress = 0;
+
+      const mimeType = item.type;
+      if (mimeType.match(/image\/*/) == null) {
+        continue;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(item);
+      reader.onload = (_event) => {
+        item.url = reader.result;
+      }
+
+      this.upload(item, cb);
+    }
+  }
+
+  upload(file: any, cb: (string) => void): void {
+    file.progress = 0;
+    file.processing = true;
+
+    this.uploadService.upload(file, AppConfig.ImagePath + '/upload').subscribe(
+      event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          file.progress = Math.round(100 * event.loaded / event.total);
+        } else if (event instanceof HttpResponse) {
+          const newImg: Image = event.body;
+          console.log(newImg);
+          file.imgid = newImg.imgid;
+          file.large = newImg.large;
+          file.processing = false;
+          cb(newImg.large);
+        }
+      },
+      err => {
+        file.progress = 0;
+        console.log('Could not upload the file!');
+        console.log(err);
+        file.processing = false;
+      });
   }
 
 }

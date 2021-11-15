@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { UploadFileService } from 'src/app/services/upload-file.service';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Image } from '../object/BeerDetail';
 
@@ -16,11 +16,19 @@ export class UploadImageComponent implements OnInit {
   path: string;
 
   files: Image[] = [];
-  faTrash = faTrash
+  faTrash = faTrash;
+  faCopy = faCopy;
+
+  imgURL: string;
 
   constructor(private uploadService: UploadFileService) { }
 
   ngOnInit(): void {
+  }
+
+  getImgUrl(file: Image){
+    console.log(file.large);
+    navigator.clipboard.writeText(file.large).then().catch(e => console.error(e));
   }
 
   setPath(p: string): void {
@@ -94,6 +102,8 @@ export class UploadImageComponent implements OnInit {
           console.log(newImg);
           file.imgid = newImg.imgid;
           file.large = newImg.large;
+          file.medium = newImg.medium;
+          file.thumbnail = newImg.thumbnail;
           file.processing = false;
         }
       },

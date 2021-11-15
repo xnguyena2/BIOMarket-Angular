@@ -2,8 +2,15 @@
   <p>{{title}}</p>
   <div class="image-container">
     <div *ngFor="let file of files" class="file-icon">
-      <img src={{file.large}} class="image-icon">
-      <fa-icon [icon]="faTrash" class="delete-image" (click)="deleteFile(file.imgid)"></fa-icon>
+      <img src={{file.medium}} class="image-icon">
+      <div class="tool-container">
+        <div class="delete-container">
+          <fa-icon [icon]="faTrash" class="delete-image" (click)="deleteFile(file.imgid)"></fa-icon>
+        </div>
+        <div class="delete-container">
+          <fa-icon [icon]="faCopy" class="delete-image" (click)="getImgUrl(file)"></fa-icon>
+        </div>
+      </div>
       <div *ngIf="file?.processing" class="progress-cont">
         <div class="progress" [style.width]="file?.progress + '%'">
         </div>
