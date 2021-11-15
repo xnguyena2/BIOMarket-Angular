@@ -1,3 +1,7 @@
+.disable-edit {
+  pointer-events: none;
+}
+
 .intLink {
   cursor: pointer;
 }

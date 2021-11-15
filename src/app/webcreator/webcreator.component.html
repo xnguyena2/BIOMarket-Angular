@@ -1,7 +1,7 @@
 <!-- <div class="compoment-container">
   <div class="container-sub"> -->
 
-<form name="compForm">
+<form name="compForm" [ngClass]="{'disable-edit' : disableEdit}">
   <div id="toolBar1">
     <select (change)="formatDoc('formatblock',formatblock.value)" #formatblock>
       <option selected>- formatting -</option>

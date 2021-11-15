@@ -14,6 +14,8 @@ export class WebcreatorComponent implements OnInit {
 
   showHTML: boolean = false;
 
+  disableEdit: boolean = false;
+
   @Input() innerHtml: string;
   @Output() generateHtml = new EventEmitter<string>();
 
@@ -107,11 +109,13 @@ export class WebcreatorComponent implements OnInit {
   }
 
   fileBrowseHandler(files) {
+    this.disableEdit = true;
     this.prepareFilesList(files, url => {
       if (url) {
         console.log(url);
         this.formatDoc('insertImage', url);
       }
+      this.disableEdit = false;
     });
   }
 
@@ -157,6 +161,7 @@ export class WebcreatorComponent implements OnInit {
         console.log('Could not upload the file!');
         console.log(err);
         file.processing = false;
+        cb(undefined);
       });
   }
 
