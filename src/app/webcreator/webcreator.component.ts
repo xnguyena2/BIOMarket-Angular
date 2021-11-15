@@ -99,7 +99,7 @@ export class WebcreatorComponent implements OnInit {
     let youtubeSrc = prompt('Write the Youtube URL here', '');
     if (youtubeSrc && youtubeSrc != '') {
       let elementSrc = `<iframe src="${youtubeSrc}" frameborder="0" allowfullscreen></iframe>`;
-      this.formatDoc('insertHTML', elementSrc)
+      this.formatDoc('insertHTML', elementSrc);
     }
   }
 
@@ -110,10 +110,16 @@ export class WebcreatorComponent implements OnInit {
 
   fileBrowseHandler(files) {
     this.disableEdit = true;
+    let imgID = new Date().getTime().toString();
+    let elementSrc = `<div id="${imgID}"></div>`;
+    this.formatDoc('insertHTML', elementSrc);
     this.prepareFilesList(files, url => {
       if (url) {
         console.log(url);
-        this.formatDoc('insertImage', url);
+        let container = document.getElementById(imgID);
+        let img = document.createElement('img');
+        img.src = url;
+        container.appendChild(img);
       }
       this.disableEdit = false;
     });
