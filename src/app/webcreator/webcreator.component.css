@@ -36,7 +36,9 @@ img.intLink {
   max-width: 100%;
 }
 
-:host ::ng-deep .textBox > div > * {
+:host ::ng-deep .textBox > div > div
+:host ::ng-deep .textBox > div > img,
+:host ::ng-deep .textBox > div > iframe {
   display: block;
   margin: 0 auto;
   max-width: 100%;

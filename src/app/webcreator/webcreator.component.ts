@@ -102,9 +102,18 @@ export class WebcreatorComponent implements OnInit {
       this.formatDoc('insertHTML', elementSrc);
     }
   }
-
+  removeFontSize (node) {
+    for (var i = 0; i < node.children.length; i++) {
+      var child = node.children[i];
+      this.removeFontSize(child);
+      if(child.style.fontSize) {
+        child.style.fontSize = 'inherit';
+      }
+    }
+}
   generateHTML() {
-    console.log(this.oDoc.nativeElement.innerHTML);
+    this.removeFontSize(this.oDoc.nativeElement);
+    console.log(this.oDoc.nativeElement.children);
     this.generateHtml.emit(this.oDoc.nativeElement.innerHTML);
   }
 
