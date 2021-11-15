@@ -1,4 +1,7 @@
-
+.upload-container{
+  position: relative;
+  height: 360px;
+}
 
 .form-container{
   display: flex;
