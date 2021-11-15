@@ -114,14 +114,16 @@ export class WebcreatorComponent implements OnInit {
     let elementSrc = `<div id="${imgID}"></div>`;
     this.formatDoc('insertHTML', elementSrc);
     this.prepareFilesList(files, url => {
+      this.disableEdit = false;
       if (url) {
         console.log(url);
         let container = document.getElementById(imgID);
-        let img = document.createElement('img');
-        img.src = url;
-        container.appendChild(img);
+        if (container) {
+          let img = document.createElement('img');
+          img.src = url;
+          container.appendChild(img);
+        }
       }
-      this.disableEdit = false;
     });
   }
 
