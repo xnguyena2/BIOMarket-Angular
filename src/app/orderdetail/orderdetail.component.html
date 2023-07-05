@@ -94,6 +94,11 @@
           <h4>Tổng Giá</h4>
           <span>{{totalPrice | moneyFormat}}</span>
         </div>
+        <div class="pair-info no-bottom-border flex-wrap">
+          <textarea type="text" name="notificationMsg" class="text-input text-notification" placeholder="old pass"
+            [(ngModel)]='notificationMsg'></textarea>
+          <a (click)="sendNotification()" class="close">Gửi Thông Báo</a>
+        </div>
         <div class="pair-info no-bottom-border">
           <a (click)="Print(printer)" class="close">In Hóa Đơn</a>
         </div>

@@ -6,6 +6,7 @@ import { invokeConfig } from '../config';
 import { cover, OrderItem } from '../object/OrderSearchResult';
 import { APIService } from '../services/api.service';
 import { AppService } from '../services/app.service';
+import { AppNotification } from '../object/Notification';
 
 @Component({
   selector: 'app-orderdetail',
@@ -32,6 +33,8 @@ export class OrderdetailComponent implements OnInit {
   address: string = '';
 
   status: string = '';
+
+  notificationMsg: string = 'Cảm ơn bạn đã đặt hàng, đơn hàng của bạn đã được xác nhận, chúng tôi sẽ ship trong thời gian sớm nhất!!';
 
   price: number = 0;
   shipPrice: number = 0;
@@ -79,11 +82,11 @@ export class OrderdetailComponent implements OnInit {
     });
   }
 
-  doneOrder(){
+  doneOrder() {
     this.closeOrder("DONE");
   }
 
-  cancelOrder(){
+  cancelOrder() {
     this.closeOrder("CANCEL");
   }
 
@@ -106,5 +109,9 @@ export class OrderdetailComponent implements OnInit {
     };
 
     printer.src = this.getPrinterSource(invoke);
+  }
+
+  public sendNotification() {
+    this.api.sendNotification(new AppNotification('1687247699000', "Xác nhận đơn hàng!", this.notificationMsg), () => { }, () => { });
   }
 }

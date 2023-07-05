@@ -29,7 +29,17 @@ export class ListBeerComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.SearchBeer(new SearchQuery('all', 0, this.maxSearResult, ''), (success, result) => {
-      this.listProduct = result.result;
+      this.listProduct = result.result.sort((n1, n2) => {
+        if (n1.name > n2.name) {
+          return 1;
+        }
+
+        if (n1.name < n2.name) {
+          return -1;
+        }
+
+        return 0;
+      });
       this.dataSource.data = this.listProduct;
       this.api.RefreshToken();
       if (success) {

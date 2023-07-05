@@ -19,6 +19,7 @@ import { StreamService } from './stream.service';
 import { ProductImport } from '../object/ProductImport';
 import { ProductOrder } from '../object/ProductOrder';
 import { TotalOrder } from '../object/TotalOrder';
+import { AppNotification } from '../object/Notification';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class APIService {
   currentOrderResult: OrderSearchResult = null;
   newOrderResult: OrderSearchResult = null;
 
-  currentVoucher:VoucherData[] = null;
+  currentVoucher: VoucherData[] = null;
 
   constructor(
     private requestServices: RequestService,
@@ -494,7 +495,7 @@ export class APIService {
       });
   }
 
-  public GetVoucherDetail(id: string, cb: (VoucherData)=>void){
+  public GetVoucherDetail(id: string, cb: (VoucherData) => void) {
     if (this.currentVoucher !== null) {
       let matchVoucher = this.currentVoucher.find(x => x.voucher_second_id === id);
       if (matchVoucher) {
@@ -593,6 +594,23 @@ export class APIService {
 
   public SaveShipProvider(submitData: any, cb: () => void, error: () => void) {
     this.requestServices.post(AppConfig.BaseUrl + 'shippingprovider/admin/update', submitData)
+      .subscribe(
+        event => {
+          if (event instanceof HttpResponse) {
+            console.log(event.body);
+            cb();
+          }
+        },
+        err => {
+          console.log('Could not save shipping provider!');
+          console.log(err);
+          error();
+        });
+  }
+
+
+  public sendNotification(notifi: AppNotification, cb: () => void, error: () => void) {
+    this.requestServices.post(`${this.HostURL}fcmtoken/admin/sendnotifi`, notifi)
       .subscribe(
         event => {
           if (event instanceof HttpResponse) {
